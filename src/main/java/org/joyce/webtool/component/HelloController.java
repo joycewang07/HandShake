@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Controller
 public class HelloController {
-
+    // junyan Zhang test
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String index(Model model) {
         String date = (new Date()).toString();
