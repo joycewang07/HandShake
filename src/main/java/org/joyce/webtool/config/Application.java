@@ -12,7 +12,7 @@ import java.util.Arrays;
 @EnableAutoConfiguration
 @ComponentScan("org.joyce.webtool")
 public class Application {
-    
+    // test
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(Application.class, args);
 
