@@ -1,0 +1,54 @@
+Login:
+
+request: user name, password
+response: success, failure reason
+
+仿照我的：server: component.base.login; html:login.html
+------------------------------
+Register(postpone):
+
+request: form(user name, password, mail ...)
+response: success, failure reason
+--------------------------------
+Main:
+
+activity list:
+request: user name(session)
+response: success, failure reason; distinct activity
+
+load card by activity:
+request: user name(session), activity
+response: user info(detail)
+
+card template (postpone)
+
+load user detail:
+no need to request server
+
+load my card:
+request: user name(session)
+response: user detail
+
+save my card:
+request: user detail(submit)
+response: success, success,
+
+save my comment(postpone):
+request: comment
+
+========================================
+Database:
+
+user
+activity(user_id, ..)
+user_activity(join user activity, many to many)
+
+
+
+
+
+
+
+
+
+
