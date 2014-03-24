@@ -14,8 +14,9 @@ import java.util.*;
 @Controller
 @RequestMapping(value="/graphic")
 public class Graphic {
-    private int graphicSize = 20;
+    private int graphicSize = 6;
     private int maxWeight = 100;
+    private int maxEdgeCount = 6;
 
     private class Edge {
         private int weight;
@@ -45,8 +46,7 @@ public class Graphic {
 
     private class Vertex {
         private int id;
-
-        private List<Edge> outEdge;
+        private Map<Integer, Edge> outEdge = new HashMap<>();
         private boolean access = false;
 
         private Vertex(int id) {
@@ -55,17 +55,21 @@ public class Graphic {
 
         private Edge addOutEdge (Edge edge) {
             if (edge != null)
-                outEdge.add(edge);
+                outEdge.put(edge.getDestinationId(), edge);
 
             return edge;
         }
 
-        public List<Edge> getOutEdge() {
+        public Map<Integer, Edge> getOutEdge() {
             return outEdge;
         }
 
-        public void setOutEdge(List<Edge> outEdge) {
-            this.outEdge = outEdge;
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
         }
 
         public boolean isAccess() {
@@ -79,49 +83,158 @@ public class Graphic {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public String graphicAssignment () {
-        List<List<Integer>> graphic = new ArrayList<>(graphicSize);
-
+    public void graphicAssignment () {
+       List<Vertex> graphic = createGraphicRandom();
+       //List<Vertex> graphic = createGraphicManual();
     }
 
     private List<Vertex> createGraphicRandom () {
-        List<Vertex> graphic = new ArrayList<>(graphicSize);
-        Random random = new Random();
-        for (Vertex vertex : graphic) {
-            int vertexCount = random.nextInt(graphicSize - 1) % (graphicSize);
-            for (int i = 0; i < vertexCount; i++) {
-                vertex = new Vertex(i);
-                int destinationId = random.nextInt(graphicSize) % (graphicSize + 1);
-                if ()
-                vertex.addOutEdge()
+        // initialize
+        Vertex[] vertexArray = new Vertex[graphicSize];
+        for (int i = 0; i < graphicSize; i++)
+            vertexArray[i] = new Vertex(i);
+
+        for (int vertexId = 0; vertexId < graphicSize; vertexId++) {
+            int edgeCount = random(0, maxEdgeCount);
+            vertexArray[vertexId] = new Vertex(vertexId);
+            for (int j = 0; j < edgeCount; j++) {
+                int weight = random(0, maxWeight);
+                // for detecting the dead lock situation
+                Set<Integer> detectionHistory = new HashSet<>();
+                while (true) {
+                    int destinationId;
+                    while(true) {
+                        destinationId = random(0, graphicSize);
+                        if (destinationId != vertexId && !vertexArray[vertexId].getOutEdge().containsKey(destinationId) && !detectionHistory.contains(destinationId))
+                            break;
+                    }
+                    vertexArray[vertexId].addOutEdge(new Edge(weight, destinationId));
+                    if (!checkCircle(vertexArray)) {
+                        vertexArray[vertexId].getOutEdge().remove(destinationId);
+                        detectionHistory.add(destinationId);
+                        if (detectionHistory.size() >= edgeCount - 1) {
+                            System.out.println("Can't find proper edge, perform next vertex. vertex id: " + vertexId);
+                            // abandon
+                            break;
+                        }
+                        // next try
+                        continue;
+                    } else {
+                        // success
+                        graphicOutput(vertexArray);
+                        detectionHistoryOutput(detectionHistory);
+                        break;
+                    }
+                }
             }
         }
+        List<Vertex> graphic = new ArrayList<>(graphicSize);
+        for (Vertex vertex : vertexArray)
+            graphic.add(vertex);
 
+        return graphic;
     }
+
+    private int random (int min, int max) {
+        Random random = new Random();
+
+        return random.nextInt(max)%(max - min +1 ) + min;
+    }
+
 
     private List<Vertex> createGraphicManual () {
+        List<Vertex> manualVertex = new ArrayList<>(5);
+        Vertex v0 = new Vertex(0);
+        v0.addOutEdge(new Edge(3, 1));
 
+        Vertex v1 = new Vertex(1);
+        v1.addOutEdge(new Edge(3, 2));
+
+        Vertex v2 = new Vertex(2);
+        v2.addOutEdge(new Edge(3, 3));
+        v2.addOutEdge(new Edge(3, 4));
+
+        Vertex v3 = new Vertex(3);
+        //v3.addOutEdge(new Edge(3, 4));
+        //v3.addOutEdge(new Edge(3, 1));
+
+        Vertex v4 = new Vertex(4);
+        //v4.addOutEdge(new Edge(3, 5));
+
+        Vertex v5 = new Vertex(5);
+        //v5.addOutEdge(new Edge(3, 2));
+
+        manualVertex.add(v0);
+        manualVertex.add(v1);
+        manualVertex.add(v2);
+        manualVertex.add(v3);
+        manualVertex.add(v4);
+        manualVertex.add(v5);
+
+        Vertex[] graphic = new Vertex[6];
+        for (int i = 0; i < 6; i++)
+            graphic[i] = manualVertex.get(i);
+
+        boolean result = checkCircle(graphic);
+        return manualVertex;
     }
 
-    private boolean traverse (Vertex startVertex) {
-        List<Vertex> vectorQueue = new LinkedList<>();
-        vectorQueue.add(startVertex);
-        Iterator iterator = vectorQueue.iterator();
-        while (iterator.hasNext()) {
-            Vertex vertex = (Vertex)iterator.next();
-            if (vertex.access == true) {
-                return false;
+    private boolean checkCircle (Vertex[] graphic) {
+        for (Vertex startVertex : graphic) {
+            if (startVertex.getOutEdge().size() == 0) {
+                startVertex.setAccess(true);
             } else {
-                for (Edge edge : vertex.getOutEdge())
-                    vectorQueue.add(edge.getDestinationId());
+                Stack<Vertex> vertexStack = new Stack<>();
+                vertexStack.push(startVertex);
+                while (!vertexStack.empty()) {
+                    Vertex vertex = vertexStack.pop();
+                    if (vertex.getId() == startVertex.getId() && vertex.isAccess())
+                        return false;
+
+                    if (!vertex.isAccess()) {
+                        vertex.setAccess(true);
+                        Iterator iterator = vertex.getOutEdge().entrySet().iterator();
+                        while (iterator.hasNext()) {
+                            int edgeDestination = (Integer) ((Map.Entry) iterator.next()).getKey();
+                            vertexStack.add(graphic[edgeDestination]);
+                        }
+                    }
+                }
+                resetAccessFlag(graphic);
             }
         }
         return true;
     }
 
-    private void resetAccessFlag (List<Vertex> graphic) {
+    private void resetAccessFlag (Vertex[] graphic) {
         for (Vertex vertex : graphic)
-            vertex.setAccess(false);
+            if (vertex != null)
+                vertex.setAccess(false);
+    }
+
+    private void graphicOutput (Vertex[] graphic) {
+        System.out.println("--------Graphic--------");
+        for (Vertex vertex : graphic) {
+            System.out.print(vertex.getId() + "(" + vertex.isAccess() + ")" +": " );
+            Iterator iterator = vertex.getOutEdge().entrySet().iterator();
+            while (iterator.hasNext()) {
+                int edgeDestination = (Integer) ((Map.Entry) iterator.next()).getKey();
+                System.out.print(edgeDestination + " ");
+            }
+            System.out.println("|");
+        }
+        System.out.println("--------Graphic--------");
+    }
+
+    private void detectionHistoryOutput (Set<Integer> detectionHistory) {
+        Iterator<Integer> iterator = detectionHistory.iterator();
+        System.out.println("--------Detection History--------");
+        while (iterator.hasNext()) {
+            int detection = iterator.next();
+            System.out.print(detection + " ");
+        }
+        System.out.println("|");
+        System.out.println("--------Detection History--------");
     }
 
 }
