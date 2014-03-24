@@ -45,6 +45,7 @@ public class Graphic {
 
     private class Vertex {
         private int id;
+
         private List<Edge> outEdge;
         private boolean access = false;
 
@@ -80,9 +81,9 @@ public class Graphic {
     @ResponseBody
     public String graphicAssignment () {
         List<List<Integer>> graphic = new ArrayList<>(graphicSize);
- return topo().toString();
+
     }
-    /*
+
     private List<Vertex> createGraphicRandom () {
         List<Vertex> graphic = new ArrayList<>(graphicSize);
         Random random = new Random();
@@ -97,67 +98,26 @@ public class Graphic {
         }
 
     }
-    */
-    private List<Vertex> createGraphicManual() {
-        List<Vertex> manualGraph = new ArrayList<>(5);
-        Vertex v1 = new Vertex(1);
-        Vertex v2 = new Vertex(2);
-        Vertex v3 = new Vertex(3);
-        Vertex v4 = new Vertex(4);
-        Vertex v5 = new Vertex(5);
 
-        Edge e14 = new Edge(1, 4);
-        Edge e12 = new Edge(1, 2);
-
-        Edge e23 = new Edge(1, 3);
-        Edge e24 = new Edge(1, 4);
-        Edge e25 = new Edge(1, 5);
-
-        v1.outEdge.add(e14);
-        v1.outEdge.add(e12);
-
-        v2.outEdge.add(e24);
-        v2.outEdge.add(e23);
-        v2.outEdge.add(e25);
-
-
-        manualGraph.add(v1);
-        manualGraph.add(v2);
-        manualGraph.add(v3);
-        manualGraph.add(v4);
-        manualGraph.add(v5);
-
-        return manualGraph;
+    private List<Vertex> createGraphicManual () {
 
     }
 
-    private Vertex[] topo() {
-
-        int size = createGraphicManual().size();
-        Vertex[] sorted = new Vertex[size - 1];
-        for (Vertex v : createGraphicManual()) {
-            if (v.outEdge.isEmpty()) {
-                sorted[size - 1] = v;
-                createGraphicManual().remove(v);
+    private boolean traverse (Vertex startVertex) {
+        List<Vertex> vectorQueue = new LinkedList<>();
+        vectorQueue.add(startVertex);
+        Iterator iterator = vectorQueue.iterator();
+        while (iterator.hasNext()) {
+            Vertex vertex = (Vertex)iterator.next();
+            if (vertex.access == true) {
+                return false;
+            } else {
+                for (Edge edge : vertex.getOutEdge())
+                    vectorQueue.add(edge.getDestinationId());
             }
-        }return sorted;
+        }
+        return true;
     }
-
-//    private boolean traverse (Vertex startVertex) {
-//        List<Vertex> vectorQueue = new LinkedList<>();
-//        vectorQueue.add(startVertex);
-//        Iterator iterator = vectorQueue.iterator();
-//        while (iterator.hasNext()) {
-//            Vertex vertex = (Vertex)iterator.next();
-//            if (vertex.access == true) {
-//                return false;
-//            } else {
-//                for (Edge edge : vertex.getOutEdge())
-//                    vectorQueue.add(edge.getDestinationId());
-//            }
-//        }
-//        return true;
-//    }
 
     private void resetAccessFlag (List<Vertex> graphic) {
         for (Vertex vertex : graphic)
