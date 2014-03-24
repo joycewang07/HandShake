@@ -5,10 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by junyan Zhang on 14-3-23.
@@ -18,14 +15,15 @@ import java.util.List;
 @RequestMapping(value="/graphic")
 public class Graphic {
     private int graphicSize = 20;
+    private int maxWeight = 100;
 
     private class Edge {
         private int weight;
-        private Vertex destination;
+        private int destinationId;
 
-        private Edge(int weight, Vertex destination) {
+        private Edge(int weight, int destinationId) {
             this.weight = weight;
-            this.destination = destination;
+            this.destinationId = destinationId;
         }
 
         public int getWeight() {
@@ -36,12 +34,12 @@ public class Graphic {
             this.weight = weight;
         }
 
-        public Vertex getDestination() {
-            return destination;
+        public int getDestinationId() {
+            return destinationId;
         }
 
-        public void setDestination(Vertex destination) {
-            this.destination = destination;
+        public void setDestinationId(int destinationId) {
+            this.destinationId = destinationId;
         }
     }
 
@@ -52,6 +50,13 @@ public class Graphic {
 
         private Vertex(int id) {
             this.id = id;
+        }
+
+        private Edge addOutEdge (Edge edge) {
+            if (edge != null)
+                outEdge.add(edge);
+
+            return edge;
         }
 
         public List<Edge> getOutEdge() {
@@ -79,6 +84,17 @@ public class Graphic {
     }
 
     private List<Vertex> createGraphicRandom () {
+        List<Vertex> graphic = new ArrayList<>(graphicSize);
+        Random random = new Random();
+        for (Vertex vertex : graphic) {
+            int vertexCount = random.nextInt(graphicSize - 1) % (graphicSize);
+            for (int i = 0; i < vertexCount; i++) {
+                vertex = new Vertex(i);
+                int destinationId = random.nextInt(graphicSize) % (graphicSize + 1);
+                if ()
+                vertex.addOutEdge()
+            }
+        }
 
     }
 
@@ -96,7 +112,7 @@ public class Graphic {
                 return false;
             } else {
                 for (Edge edge : vertex.getOutEdge())
-                    vectorQueue.add(edge.getDestination());
+                    vectorQueue.add(edge.getDestinationId());
             }
         }
         return true;
@@ -105,8 +121,6 @@ public class Graphic {
     private void resetAccessFlag (List<Vertex> graphic) {
         for (Vertex vertex : graphic)
             vertex.setAccess(false);
-
-        
     }
 
 }
