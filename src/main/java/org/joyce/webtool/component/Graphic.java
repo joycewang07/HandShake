@@ -45,6 +45,7 @@ public class Graphic {
 
     private class Vertex {
         private int id;
+
         private List<Edge> outEdge;
         private boolean access = false;
 
