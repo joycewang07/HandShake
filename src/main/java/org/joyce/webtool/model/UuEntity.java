@@ -1,9 +1,6 @@
 package org.joyce.webtool.model;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Created by Administrator on 14-3-17.
@@ -15,6 +12,7 @@ public class UuEntity {
     private int column2;
     private int column3;
 
+    @Id
     @Basic
     @Column(name = "column_1")
     public int getColumn1() {
