@@ -14,8 +14,9 @@ import java.util.*;
 @Controller
 @RequestMapping(value="/graphic")
 public class Graphic {
-    private int graphicSize = 20;
+    private int graphicSize = 5;
     private int maxWeight = 100;
+    private int maxEdgeCount = 3;
 
     private class Edge {
         private int weight;
@@ -45,7 +46,7 @@ public class Graphic {
 
     private class Vertex {
         private int id;
-        private List<Edge> outEdge;
+        private List<Edge> outEdge = new LinkedList<>();
         private boolean access = false;
 
         private Vertex(int id) {
@@ -63,6 +64,14 @@ public class Graphic {
             return outEdge;
         }
 
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
+
         public void setOutEdge(List<Edge> outEdge) {
             this.outEdge = outEdge;
         }
@@ -78,41 +87,82 @@ public class Graphic {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public String graphicAssignment () {
-        List<List<Integer>> graphic = new ArrayList<>(graphicSize);
+    public void graphicAssignment () {
+        List<Vertex> graphic = createGraphicRandom();
 
     }
 
     private List<Vertex> createGraphicRandom () {
-        List<Vertex> graphic = new ArrayList<>(graphicSize);
-        Random random = new Random();
-        for (Vertex vertex : graphic) {
-            int vertexCount = random.nextInt(graphicSize - 1) % (graphicSize);
-            for (int i = 0; i < vertexCount; i++) {
-                vertex = new Vertex(i);
-                int destinationId = random.nextInt(graphicSize) % (graphicSize + 1);
-                if ()
-                vertex.addOutEdge()
+        Vertex[] vertexArray = new Vertex[graphicSize];
+        for (int i = 0; i < graphicSize; i++)
+            vertexArray[i] = null;
+
+        for (int vertexId = 0; vertexId < graphicSize; vertexId++) {
+            int edgeCount = random(0, maxEdgeCount);
+            vertexArray[vertexId] = new Vertex(vertexId);
+            for (int j = 0; j < edgeCount; j++) {
+                int weight = random(0, maxWeight);
+                while (true) {
+                    int destinationId;
+                    while(true) {
+                        destinationId = random(0, graphicSize);
+                        if (destinationId != vertexId)
+                            break;
+                    }
+                    Edge newEdge = vertexArray[vertexId].addOutEdge(new Edge(weight, destinationId));
+                    if (!traverse(vertexArray)) {
+                        vertexArray[vertexId].getOutEdge().remove(newEdge);
+                        continue;
+                    } else {
+                        break;
+                    }
+                }
             }
         }
+        List<Vertex> graphic = new ArrayList<>(graphicSize);
+        for (Vertex vertex : vertexArray)
+            graphic.add(vertex);
 
+        return graphic;
     }
+
+    private int random (int min, int max) {
+        Random random = new Random();
+
+        return random.nextInt(max)%(max - min +1 ) + min;
+    }
+
 
     private List<Vertex> createGraphicManual () {
 
     }
 
-    private boolean traverse (Vertex startVertex) {
-        List<Vertex> vectorQueue = new LinkedList<>();
-        vectorQueue.add(startVertex);
-        Iterator iterator = vectorQueue.iterator();
-        while (iterator.hasNext()) {
-            Vertex vertex = (Vertex)iterator.next();
-            if (vertex.access == true) {
+    private boolean traverse (Vertex[] graphic) {
+        List<Integer> vertexQueue = new LinkedList<>();
+        // traverse from first one
+        vertexQueue.add(0);
+        Integer queuePointer = 0;
+        while (queuePointer < vertexQueue.size()) {
+            Vertex vertex;
+            if (graphic[queuePointer] == null) {
+                ++queuePointer;
+                continue;
+            } else {
+                vertex = graphic[queuePointer];
+            }
+
+            if (vertex.isAccess()) {
                 return false;
             } else {
-                for (Edge edge : vertex.getOutEdge())
-                    vectorQueue.add(edge.getDestinationId());
+                vertex.setAccess(true);
+                if (vertex.getOutEdge().size() == 0) {
+                    ++queuePointer;
+                    continue;
+                } else {
+                    ++queuePointer;
+                    for (Edge edge : vertex.getOutEdge())
+                        vertexQueue.add(edge.getDestinationId());
+                }
             }
         }
         return true;
