@@ -24,7 +24,7 @@ public class DisplayActivity {
     @Autowired
     private AccountService accountService;
 
-    private String retrieveActivityByUserId = "from ";
+    private String retrieveActivityByUserId = "from o ";
 
     public DisplayActivity() {
     }
