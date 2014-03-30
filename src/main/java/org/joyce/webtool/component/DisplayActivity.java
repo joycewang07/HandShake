@@ -24,7 +24,7 @@ public class DisplayActivity {
     @Autowired
     private AccountService accountService;
 
-    private String retrieveActivityByUserId = "from o ";
+    private String retrieveActivityByUserId = "from RelationshipEntity where fkUser1 = ?";
 
     public DisplayActivity() {
     }
@@ -36,8 +36,15 @@ public class DisplayActivity {
         String user = accountService.getCurrentUser(request);
         if (user != null) {
             Session session = sessionFactory.openSession();
-            List<ActivityEntity> activityEntityList = session.createQuery(retrieveActivityByUserId).list()
+            String testUser = "3129578276";
+            List<ActivityEntity> activityEntityList = session.createQuery(retrieveActivityByUserId).setParameter(0, testUser).list();
         }
+
+        int testUser = 2;
+        Session session = sessionFactory.openSession();
+        List<ActivityEntity> activityEntityList = session.createQuery(retrieveActivityByUserId).setParameter(0, testUser).list();
+
+        return null;
     }
 
 }
