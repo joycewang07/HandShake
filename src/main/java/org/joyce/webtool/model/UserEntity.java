@@ -7,18 +7,22 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "user", schema = "", catalog = "")
-public class UserEntitiy {
-
-    private Integer userID;
-    private String name;
-    private String type;
-
-    public UserEntitiy() {
-    }
+public class UserEntity {
 
     @Id
-    @Basic
     @Column(name = "pk_user")
+    private Integer userID;
+    @Column(name = "user_name")
+    private String name;
+    @Column(name = "password")
+    private String password;
+    @Column(name = "user_type")
+    private String type;
+
+    public UserEntity() {
+    }
+
+
     public Integer getUserID() {
         return userID;
     }
@@ -27,8 +31,6 @@ public class UserEntitiy {
         this.userID = userID;
     }
 
-    @Basic
-    @Column(name = "user_name")
     public String getName() {
         return name;
     }
@@ -37,8 +39,14 @@ public class UserEntitiy {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "user_type")
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public String getType() {
         return type;
     }

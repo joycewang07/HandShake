@@ -212,6 +212,7 @@ Time: 10:13
                 height: 300,
                 collapsible: true,
                 split: true,
+                margin: '0 0 5 0',
                 dockedItems: [cardToolBar]
             });
 

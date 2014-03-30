@@ -7,13 +7,13 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "activity", schema = "", catalog = "")
-public class ActivityEntitiy {
+public class ActivityEntity {
     private Integer activityID;
     private String organizer;
     private String industry;
 
 
-    public ActivityEntitiy() {
+    public ActivityEntity() {
     }
 
 
