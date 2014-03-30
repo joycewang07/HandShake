@@ -12,10 +12,11 @@ import java.util.*;
  */
 
 @Controller
-@RequestMapping(value="/graphic")
+@RequestMapping(value = "/graphic")
 public class Graphic {
-    private int graphicSize = 20;
+    private int graphicSize = 5;
     private int maxWeight = 100;
+    private int maxEdgeCount = 5;
 
     private class Edge {
         private int weight;
@@ -45,27 +46,30 @@ public class Graphic {
 
     private class Vertex {
         private int id;
-
-        private List<Edge> outEdge;
+        private Map<Integer, Edge> outEdge = new HashMap<>();
         private boolean access = false;
 
         private Vertex(int id) {
             this.id = id;
         }
 
-        private Edge addOutEdge (Edge edge) {
+        private Edge addOutEdge(Edge edge) {
             if (edge != null)
-                outEdge.add(edge);
+                outEdge.put(edge.getDestinationId(), edge);
 
             return edge;
         }
 
-        public List<Edge> getOutEdge() {
+        public Map<Integer, Edge> getOutEdge() {
             return outEdge;
         }
 
-        public void setOutEdge(List<Edge> outEdge) {
-            this.outEdge = outEdge;
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
         }
 
         public boolean isAccess() {
@@ -79,49 +83,255 @@ public class Graphic {
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
-    public String graphicAssignment () {
-        List<List<Integer>> graphic = new ArrayList<>(graphicSize);
-
+    public void graphicAssignment() {
+        List<Vertex> graphic = createGraphicRandom();
+        //List<Vertex> graphic = createGraphicManual();
     }
 
-    private List<Vertex> createGraphicRandom () {
-        List<Vertex> graphic = new ArrayList<>(graphicSize);
-        Random random = new Random();
-        for (Vertex vertex : graphic) {
-            int vertexCount = random.nextInt(graphicSize - 1) % (graphicSize);
-            for (int i = 0; i < vertexCount; i++) {
-                vertex = new Vertex(i);
-                int destinationId = random.nextInt(graphicSize) % (graphicSize + 1);
-                if ()
-                vertex.addOutEdge()
+    private List<Vertex> createGraphicRandom() {
+        // initialize
+        Vertex[] vertexArray = new Vertex[graphicSize];
+        for (int i = 0; i < graphicSize; i++)
+            vertexArray[i] = new Vertex(i);
+
+        for (int vertexId = 0; vertexId < graphicSize; vertexId++) {
+            int edgeCount = random(0, maxEdgeCount);
+            System.out.println("<< Vertex " + vertexId + " should have " + edgeCount + " edges >>");
+            vertex:
+            for (int j = 0; j < edgeCount; j++) {
+                int weight = random(0, maxWeight);
+                // for detecting the no-way situation(can not draw anything)
+                Set<Integer> detectionHistory = new HashSet<>();
+                while (true) {
+                    int destinationId = 0;
+                    while (true) {
+                        destinationId = random(0, graphicSize);
+                        if (destinationId != vertexId && !vertexArray[vertexId].getOutEdge().containsKey(destinationId)
+                                && !detectionHistory.contains(destinationId))
+                            break;
+                    }
+                    vertexArray[vertexId].addOutEdge(new Edge(weight, destinationId));
+                    if (!checkCircle(vertexArray)) {
+                        vertexArray[vertexId].getOutEdge().remove(destinationId);
+                        detectionHistory.add(destinationId);
+                        if (detectionHistory.size() + vertexArray[vertexId].getOutEdge().size() >= maxEdgeCount - 1) {
+                            System.out.println("Can't add more edge to vertex: " + vertexId + ", abandon!");
+                            break vertex;
+                        }
+                        // next try
+                        System.out.println("Try to add " + "destination: " + destinationId + " to vertex: " + vertexId
+                                + " ,failure! Try next.");
+                        detectionHistoryOutput(detectionHistory);
+                        continue;
+                    } else {
+                        // success
+                        System.out.println("Success add destination: " + destinationId + " to vertex: " + vertexId);
+                        graphicOutput(vertexArray);
+                        break;
+                    }
+                }
             }
+            System.out.println("<< Vertex " + vertexId + " actually have " + vertexArray[vertexId].getOutEdge().size() + " edges >>");
+            System.out.println("===================================");
         }
+        List<Vertex> graphic = new ArrayList<>(graphicSize);
+        for (Vertex vertex : vertexArray)
+            graphic.add(vertex);
 
+        return graphic;
     }
 
-    private List<Vertex> createGraphicManual () {
+    private int random(int min, int max) {
+        Random random = new Random();
 
+        return random.nextInt(max) % (max - min + 1) + min;
     }
 
-    private boolean traverse (Vertex startVertex) {
-        List<Vertex> vectorQueue = new LinkedList<>();
-        vectorQueue.add(startVertex);
-        Iterator iterator = vectorQueue.iterator();
-        while (iterator.hasNext()) {
-            Vertex vertex = (Vertex)iterator.next();
-            if (vertex.access == true) {
-                return false;
-            } else {
-                for (Edge edge : vertex.getOutEdge())
-                    vectorQueue.add(edge.getDestinationId());
+
+    private List<Vertex> createGraphicManual() {
+        List<Vertex> manualVertex = new ArrayList<>(5);
+        Vertex v0 = new Vertex(0);
+        v0.addOutEdge(new Edge(3, 1));
+        v0.addOutEdge(new Edge(3, 3));
+        v0.addOutEdge(new Edge(3, 4));
+        v0.addOutEdge(new Edge(3, 5));
+
+        Vertex v1 = new Vertex(1);
+        //v1.addOutEdge(new Edge(3, 2));
+
+        Vertex v2 = new Vertex(2);
+        v2.addOutEdge(new Edge(3, 1));
+        v2.addOutEdge(new Edge(3, 5));
+        v2.addOutEdge(new Edge(3, 4));
+        v2.addOutEdge(new Edge(3, 3));
+
+        Vertex v3 = new Vertex(3);
+        v3.addOutEdge(new Edge(3, 1));
+        v3.addOutEdge(new Edge(3, 4));
+
+        Vertex v4 = new Vertex(4);
+        //v4.addOutEdge(new Edge(3, 5));
+
+        Vertex v5 = new Vertex(5);
+        //v5.addOutEdge(new Edge(3, 2));
+
+        manualVertex.add(v0);
+        manualVertex.add(v1);
+        manualVertex.add(v2);
+        manualVertex.add(v3);
+        manualVertex.add(v4);
+        manualVertex.add(v5);
+
+        Vertex[] graphic = new Vertex[6];
+        for (int i = 0; i < 6; i++)
+            graphic[i] = manualVertex.get(i);
+
+        boolean result = checkCircle(graphic);
+        return manualVertex;
+    }
+
+    private boolean checkCircle(Vertex[] graphic) {
+        for (Vertex startVertex : graphic) {
+            Stack<Vertex> vertexStack = new Stack<>();
+            vertexStack.push(startVertex);
+            // System.out.print("Start from " + startVertex.getId() + " , stack: < ");
+            while (!vertexStack.empty()) {
+                Vertex vertex = vertexStack.pop();
+                //System.out.print(vertex.getId() + " ");
+                if (vertex.getId() == startVertex.getId() && vertex.isAccess()) {
+                    //System.out.println("Check circle failure, start id: " + startVertex.getId());
+                    resetAccessFlag(graphic);
+                    return false;
+                }
+                if (!vertex.isAccess()) {
+                    vertex.setAccess(true);
+                    Iterator iterator = vertex.getOutEdge().entrySet().iterator();
+
+                    while (iterator.hasNext()) {
+                        int edgeDestination = (Integer) ((Map.Entry) iterator.next()).getKey();
+                        vertexStack.add(graphic[edgeDestination]);
+                    }
+                }
             }
+            //System.out.println(">");
+            resetAccessFlag(graphic);
         }
         return true;
     }
 
-    private void resetAccessFlag (List<Vertex> graphic) {
+    private void resetAccessFlag(Vertex[] graphic) {
         for (Vertex vertex : graphic)
-            vertex.setAccess(false);
+            if (vertex != null)
+                vertex.setAccess(false);
     }
+
+    private void graphicOutput(Vertex[] graphic) {
+        System.out.println("--------Graphic--------");
+        for (Vertex vertex : graphic) {
+            System.out.print(vertex.getId() + ": ");
+            System.out.print("< ");
+            Iterator iterator = vertex.getOutEdge().entrySet().iterator();
+            while (iterator.hasNext()) {
+                int edgeDestination = (Integer) ((Map.Entry) iterator.next()).getKey();
+                System.out.print(edgeDestination + " ");
+            }
+            System.out.println(">");
+        }
+        System.out.println("-----------------------");
+    }
+
+    private void detectionHistoryOutput(Set<Integer> detectionHistory) {
+        Iterator<Integer> iterator = detectionHistory.iterator();
+        System.out.print("Detection History: < ");
+        while (iterator.hasNext()) {
+            int detection = iterator.next();
+            System.out.print(detection + " ");
+        }
+        System.out.println(">");
+    }
+
+
+    private Stack<Vertex> topo() {
+        List<Vertex> thisGarphic = createGraphicRandom();
+        int size = thisGarphic.size();
+        ArrayList<Vertex> startVertces = new ArrayList<Vertex>();
+        Stack topolist = null;
+    //all vertexs that have no outedge
+        for (Vertex v : thisGarphic) {
+            if (v.getOutEdge().isEmpty()) {
+                startVertces.add(v);
+            }
+        }
+    // rull out independent spot
+        for (Vertex ve : startVertces) {
+            for (Vertex ver : thisGarphic) {
+                if (ver.getOutEdge().containsKey(ve.getId())) {
+                    startVertces.remove(ve);
+                    break;
+                }
+            }
+        }
+
+        for (Vertex v : startVertces) {
+            topolist = new Stack();
+            Vertex current = v;
+            // delete all the edges associated with v;
+            // loop next round in graphic
+            while (thisGarphic.size() > 0) {
+                topolist.push(current);
+                for (Vertex checkV : thisGarphic) {
+                    if (checkV.getOutEdge().containsKey(current.getId())) {
+                        checkV.getOutEdge().remove(current.getId());
+                    }
+                }
+                thisGarphic.remove(current);
+
+                for (Vertex vertex : thisGarphic) {
+                    if (vertex.getOutEdge().isEmpty()) {
+                        current = vertex;
+                        break;
+                    }
+                }
+
+
+            }
+        }
+
+        return topolist;
+    }
+
+    private void topologicalSort (Vertex[] graphic) {
+        for (Vertex startVertex : graphic) {
+            if (startVertex.getOutEdge().size() > 0) {
+
+                Map<Integer, Vertex> result = new LinkedHashMap<>();
+                Queue<Vertex> workingQueue = new LinkedList<>();
+                workingQueue.add(startVertex);
+                System.out.println("Working from vertex: " + startVertex.getId());
+                System.out.print("Topological sort: < ");
+
+                while (workingQueue.size() > 0) {
+                    Vertex vertex = workingQueue.poll();
+                    result.put(vertex.getId(), vertex);
+                    System.out.print(vertex.getId() + " ");
+                    Iterator iterator = vertex.getOutEdge().entrySet().iterator();
+                    while (iterator.hasNext()) {
+                        int edgeDestination = (Integer) ((Map.Entry) iterator.next()).getKey();
+                        if (!result.containsKey(edgeDestination))
+                            workingQueue.add(graphic[edgeDestination]);
+                    }
+                }
+                //output result map
+//                Iterator iterator = result.entrySet().iterator();
+//                System.out.print("Reverse order of topological sort: < ");
+//                while (iterator.hasNext())
+//                    System.out.print(((Map.Entry) iterator.next()).getKey() + " ");
+
+                System.out.println(">");
+            }
+        }
+    }
+
+
 
 }
