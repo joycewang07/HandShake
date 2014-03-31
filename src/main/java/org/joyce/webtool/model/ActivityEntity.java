@@ -8,8 +8,12 @@ import javax.persistence.*;
 @Entity
 @Table(name = "activity", schema = "", catalog = "")
 public class ActivityEntity {
-    private Integer activityID;
+    @Id
+    @Column(name = "pk_activity")
+    private Integer activityId;
+    @Column(name = "activity_organizer")
     private String organizer;
+    @Column(name = "activity_industry")
     private String industry;
 
 
@@ -17,19 +21,17 @@ public class ActivityEntity {
     }
 
 
-    @Id
-    @Basic
-    @Column(name = "pk_activity")
-    public Integer getActivityID() {
-        return activityID;
+
+    public Integer getActivityId() {
+        return activityId;
     }
 
-    public void setActivityID(Integer activityID) {
-        this.activityID = activityID;
+    public void setActivityId(Integer activityId) {
+        this.activityId = activityId;
     }
 
-    @Basic
-    @Column(name = "activity_organizer")
+
+
     public String getOrganizer() {
         return organizer;
     }
@@ -38,8 +40,8 @@ public class ActivityEntity {
         this.organizer = organizer;
     }
 
-    @Basic
-    @Column(name = "activity_industry")
+
+
     public String getIndustry() {
         return industry;
     }

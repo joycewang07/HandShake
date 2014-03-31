@@ -21,7 +21,7 @@ public class Login {
 
     @RequestMapping(value = "{user}")
     @ResponseBody
-    private String testLogin (@PathVariable(value="user") String user, HttpServletRequest request) {
+    private String testLogin (@PathVariable(value="user") int user, HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.setAttribute("user", user);
         return "Success: " + session.getAttribute("user");
