@@ -25,9 +25,9 @@ public class AccountService {
         return true;
     }
 
-    public int getCurrentUser (HttpServletRequest request) {
+    public Integer getCurrentUser (HttpServletRequest request) {
         HttpSession session = request.getSession();
-        return (int)session.getAttribute("user");
+        return (Integer)session.getAttribute("user");
     }
 
 

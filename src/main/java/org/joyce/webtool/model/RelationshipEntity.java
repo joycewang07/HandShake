@@ -2,19 +2,26 @@ package org.joyce.webtool.model;
 
 import javax.persistence.*;
 
-/**
- * Created by junyan Zhang on 14-3-30.
- */
+
 @Entity
 @Table(name = "relationship", schema = "", catalog = "")
 public class RelationshipEntity {
-    private Integer pkRelationship;
-    private Integer fkActivity;
-    private Integer fkUser1;
-    private Integer fkUser2;
-
     @Id
     @Column(name = "pk_relationship")
+    private Integer pkRelationship;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "fk_Activity")
+    private ActivityEntity fkActivity;
+
+    @Column(name = "fk_user1")
+    private Integer fkUser1;
+
+    @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @JoinColumn(name = "fk_user2")
+    private UserEntity fkUser2;
+
+
     public Integer getPkRelationship() {
         return pkRelationship;
     }
@@ -23,18 +30,17 @@ public class RelationshipEntity {
         this.pkRelationship = pkRelationship;
     }
 
-    @Basic
-    @Column(name = "fk_activity")
-    public Integer getFkActivity() {
+
+    public ActivityEntity getFkActivity() {
         return fkActivity;
     }
 
-    public void setFkActivity(Integer fkActivity) {
+    public void setFkActivity(ActivityEntity fkActivity) {
         this.fkActivity = fkActivity;
     }
 
-    @Basic
-    @Column(name = "fk_user1")
+
+
     public Integer getFkUser1() {
         return fkUser1;
     }
@@ -43,13 +49,12 @@ public class RelationshipEntity {
         this.fkUser1 = fkUser1;
     }
 
-    @Basic
-    @Column(name = "fk_user2")
-    public Integer getFkUser2() {
+
+    public UserEntity getFkUser2() {
         return fkUser2;
     }
 
-    public void setFkUser2(Integer fkUser2) {
+    public void setFkUser2(UserEntity fkUser2) {
         this.fkUser2 = fkUser2;
     }
 

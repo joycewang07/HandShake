@@ -12,12 +12,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- * Created by junyan Zhang on 14-3-30.
- */
+
 
 @Controller
 @RequestMapping(value="/activity", method = RequestMethod.GET)
@@ -28,7 +27,7 @@ public class DisplayActivity {
     private AccountService accountService;
 
     private String retrieveRelationshipByUserId = "from RelationshipEntity where fkUser1 = ? ";
-    private String retrieveActivityEntityById = " from ActivityEntity where activityId in (:activityIdList)";
+
     public DisplayActivity() {
     }
 
@@ -40,15 +39,12 @@ public class DisplayActivity {
         Session session = sessionFactory.openSession();
         List<RelationshipEntity> relationshipEntityList = session.createQuery(retrieveRelationshipByUserId).setParameter(0, userId).list();
 
-        List<Integer> activityIdList = new LinkedList<>();
-
+        ArrayList<ActivityEntity> activityEntityList = new ArrayList<>();
         for(RelationshipEntity relationshipEntity: relationshipEntityList){
-            activityIdList.add(relationshipEntity.getFkActivity());
+            activityEntityList.add(relationshipEntity.getFkActivity());
         }
+  // ArrayList<ActivityEntity> activityEntityList= (ArrayList<ActivityEntity>)session.createQuery(retrieveRelationshipByUserId).setParameter(0, userId).list();
 
-        List<ActivityEntity> activityEntityList= session.createQuery(retrieveActivityEntityById).setParameterList("activityIdList", activityIdList).list();
-
-        //session.createQuery(retrieveActivityEntityById).setp
         return activityEntityList;
     }
 

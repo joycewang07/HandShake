@@ -1,5 +1,7 @@
 package org.joyce.webtool.model;
 
+import org.eclipse.jetty.server.Authentication;
+
 import javax.persistence.*;
 
 /**
@@ -12,12 +14,21 @@ public class UserEntity {
     @Id
     @Column(name = "pk_user")
     private Integer userID;
+
     @Column(name = "user_name")
     private String name;
+
     @Column(name = "password")
     private String password;
+
     @Column(name = "user_type")
     private String type;
+
+    @Column(name = "user_card")
+    private String card;
+
+    @Transient
+    private String html;
 
     public UserEntity() {
     }
@@ -53,5 +64,31 @@ public class UserEntity {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getCard() {
+        return card;
+    }
+
+    public void setCard(String card) {
+        this.card = card;
+    }
+
+    public String getHtml() {
+        return html;
+    }
+
+    public void setHtml(String html) {
+        this.html = html;
+    }
+
+    public void generateHtml(){
+        StringBuilder stringBuilder = new StringBuilder();
+
+       // String businessCard = "<span><img src=\"/images/$$$\" alt=\"Error\"></span>";
+        String businessCard = "<span><img src=\"/images/football.jpg\" alt=\"Error\"></span>";
+        //stringBuilder.append(businessCard.replace("$$$",card));
+
+       this.setHtml(businessCard.toString());
     }
 }

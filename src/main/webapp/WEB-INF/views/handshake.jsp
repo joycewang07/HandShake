@@ -62,27 +62,34 @@ Time: 10:13
             Ext.define('ActivityListModel', {
                 extend: 'Ext.data.Model',
                 fields: [
+                    {name: 'activityId', type: 'int'},
                     {name: 'date', type: 'string'},
-                    {name: 'activity', type: 'string'}
+                    {name: 'name', type: 'string'}
                 ]
             });
 
             var activityListStore = Ext.create('Ext.data.Store', {
                 storeId: 'activityListStore',
                 model: 'ActivityListModel',
-                data: {'items':[
-                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
-                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
-                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
-                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"}
-                ]},
+//                data: {'items':[
+//                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
+//                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
+//                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
+//                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"}
+//                ]},
                 proxy: {
-                    type: 'memory',
+                    method: "GET",
+                    url:'/activity/list',
+                    type: 'ajax',
+                    limitParam : undefined,
+                    pageParam : undefined,
+                    startParam : undefined,
                     reader: {
-                        type: 'json',
-                        root: 'items'
+                        type: 'json'
+                       // root: 'items'
                     }
-                }
+                },
+                autoLoad:true
             });
 
             var activityListPanel = Ext.create('Ext.grid.Panel', {
@@ -95,7 +102,7 @@ Time: 10:13
                     flex: 1
                 }, {
                     text: 'Activity Name',
-                    dataIndex: 'activity',
+                    dataIndex: 'name',
                     flex: 2
                 }],
                 region: 'west',
@@ -109,26 +116,36 @@ Time: 10:13
             Ext.define('CardListModel', {
                 extend: 'Ext.data.Model',
                 fields: [
-                    {name: 'card', type: 'string'}
+                    {name: 'userID', type: 'int'},
+                    {name: 'type', type: 'string'},
+                    {name: 'card', type: 'string'},
+                    {name: 'html', type: 'string'}
                 ]
             });
 
             var cardListStore = Ext.create('Ext.data.Store', {
                 storeId: 'cardListStore',
                 model: 'CardListModel',
-                data: {'items':[
-                    {card:"<span>Card 1 </span></br>Card Detail 1</br>Card Detail 2</span>"},
-                    {card:"<span>Card 2 </span></br>Card Detail 1</br>Card Detail 2</span>"},
-                    {card:"<span>Card 3 </span></br>Card Detail 1</br>Card Detail 2</span>"},
-                    {card:"<span>Card 4 </span></br>Card Detail 1</br>Card Detail 2</span>"}
-                ]},
+//                data: {'items':[
+//                    {card:"<span>Card 1 </span></br>Card Detail 1</br>Card Detail 2</span>"},
+//                    {card:"<span>Card 2 </span></br>Card Detail 1</br>Card Detail 2</span>"},
+//                    {card:"<span>Card 3 </span></br>Card Detail 1</br>Card Detail 2</span>"},
+//                    {card:"<span>Card 4 </span></br>Card Detail 1</br>Card Detail 2</span>"}
+//                ]},
                 proxy: {
-                    type: 'memory',
+                    type: 'ajax',
+                    method: "GET",
+                    url:'/cardList',
+                    type: 'ajax',
+                    limitParam : undefined,
+                    pageParam : undefined,
+                    startParam : undefined,
                     reader: {
-                        type: 'json',
-                        root: 'items'
+                        type: 'json'
+                       // root: 'items'
                     }
-                }
+                },
+                autoLoad: false
             });
 
             var cardListToolBar = Ext.create('Ext.toolbar.Toolbar', {
@@ -174,7 +191,7 @@ Time: 10:13
                 store: cardListStore,
                 columns: [{
                     text: 'Card',
-                    dataIndex: 'card',
+                    dataIndex: 'html',
                     flex: 1
                 }],
                 region: 'center',
@@ -230,7 +247,8 @@ Time: 10:13
             });
 
             function onActivityClick (component, record, item, index, e, eOpts) {
-
+                cardListStore.getProxy().extraParams = {activityId: record.get('activityId')};
+                cardListStore.load();
             }
         }
 

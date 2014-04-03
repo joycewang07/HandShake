@@ -19,6 +19,9 @@ response: success, failure reason; distinct activity
 load card by activity:
 request: user name(session), activity
 response: user info(detail)
+        load people cards by url
+        /peoplecard/{id}---> in Controller, visit relationship return User Entity. Structure a HTML block
+
 
 card template (postpone)
 
