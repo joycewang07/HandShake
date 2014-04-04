@@ -196,7 +196,7 @@ Time: 10:13
                 }],
                 region: 'center',
                 split: true,
-                margin: '0 0 0 0',
+                margin: '0 0 5 0',
                 dockedItems: [cardListToolBar],
                 listeners: {itemclick: onActivityClick}
             });
@@ -225,8 +225,9 @@ Time: 10:13
                 title: 'Card',
                 //header: false,
                 html: '<p> Hello World! </p>',
-                region: 'south',
-                height: 300,
+                region: 'east',
+                width: 250,
+               // height: 300,
                 collapsible: true,
                 split: true,
                 margin: '0 0 5 0',

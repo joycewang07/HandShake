@@ -17,9 +17,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 
-
 @Controller
-@RequestMapping(value="/activity", method = RequestMethod.GET)
+@RequestMapping(value = "/activity", method = RequestMethod.GET)
 public class DisplayActivity {
     @Autowired
     private SessionFactory sessionFactory;
@@ -32,18 +31,21 @@ public class DisplayActivity {
     }
 
     @ResponseBody
-    @RequestMapping(value="list", method = RequestMethod.GET)
-    public List<ActivityEntity> getActivityList (HttpServletRequest request) {
+    @RequestMapping(value = "list", method = RequestMethod.GET)
+    public List<ActivityEntity> getActivityList(HttpServletRequest request) {
 
         int userId = accountService.getCurrentUser(request);
         Session session = sessionFactory.openSession();
         List<RelationshipEntity> relationshipEntityList = session.createQuery(retrieveRelationshipByUserId).setParameter(0, userId).list();
 
         ArrayList<ActivityEntity> activityEntityList = new ArrayList<>();
-        for(RelationshipEntity relationshipEntity: relationshipEntityList){
-            activityEntityList.add(relationshipEntity.getFkActivity());
+        for (RelationshipEntity relationshipEntity : relationshipEntityList) {
+            ActivityEntity activityEntity = relationshipEntity.getFkActivity();
+            if (!activityEntityList.contains(activityEntity)) {
+                activityEntityList.add(activityEntity);
+            }
         }
-  // ArrayList<ActivityEntity> activityEntityList= (ArrayList<ActivityEntity>)session.createQuery(retrieveRelationshipByUserId).setParameter(0, userId).list();
+        // ArrayList<ActivityEntity> activityEntityList= (ArrayList<ActivityEntity>)session.createQuery(retrieveRelationshipByUserId).setParameter(0, userId).list();
 
         return activityEntityList;
     }
