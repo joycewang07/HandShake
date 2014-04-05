@@ -35,24 +35,26 @@ public class DisplayCard {
 
 
     @ResponseBody
-    @RequestMapping(method = RequestMethod.GET)
-    public ArrayList<UserEntity> getCardList(int activityId, HttpServletRequest request){
-           int currentUserId= accountService.getCurrentUser(request);
-           if(currentUserId==0){
-           //Plz login to use service
-           }
-           Session session=sessionFactory.openSession();
+     @RequestMapping(method = RequestMethod.GET)
+     public ArrayList<UserEntity> getCardList(int activityId, HttpServletRequest request){
+        int currentUserId= accountService.getCurrentUser(request);
+        if(currentUserId==0){
+            //Plz login to use service
+        }
+        Session session=sessionFactory.openSession();
 
-           List<RelationshipEntity> relationshipEntityList = session.createQuery(retrieveUserListByCurUserId).setParameter(0, currentUserId).setParameter(1, 1).list();
-           ArrayList<UserEntity> userList= new ArrayList<>();
+        List<RelationshipEntity> relationshipEntityList = session.createQuery(retrieveUserListByCurUserId).setParameter(0, currentUserId).setParameter(1, 1).list();
+        ArrayList<UserEntity> userList= new ArrayList<>();
 
-            for(RelationshipEntity relationshipEntity: relationshipEntityList){
-                UserEntity userEntity= relationshipEntity.getFkUser2();
-                userEntity.generateHtml();
-                userList.add(userEntity);
-            }
+        for(RelationshipEntity relationshipEntity: relationshipEntityList){
+            UserEntity userEntity= relationshipEntity.getFkUser2();
+            userEntity.generateHtml();
+            userList.add(userEntity);
+        }
 
         return userList;
     }
+
+
 
 }

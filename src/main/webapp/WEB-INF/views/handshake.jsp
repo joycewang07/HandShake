@@ -236,6 +236,7 @@ Time: 10:13
 
             var rightPanel = Ext.create('Ext.panel.Panel', {
                 id: "rightPanel",
+
                 layout: 'border',
                 region: 'center',
                 items: [cardListPanel, cardPanel]

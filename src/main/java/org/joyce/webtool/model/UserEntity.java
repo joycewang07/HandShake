@@ -85,7 +85,7 @@ public class UserEntity {
     public void generateHtml(){
         //StringBuilder stringBuilder = new StringBuilder();
 
-        String businessCardTemplate = "<span><b>???</b><br><img src=$$$ alt=\"Error\" width=\"42\" height=\"42\"></span>";
+        String businessCardTemplate = "<span><b>???</b><br><img src=$$$ alt=\"Error\" width=\"70\" height=\"70\"></span>";
        // String businessCard = "<span><img src=\"/images/football.jpg\" alt=\"Error\" width=\"42\" height=\"42\"></span>";
         String businessCard = businessCardTemplate.replace("???", this.name).replace("$$$", this.card);
 
