@@ -27,20 +27,20 @@ Time: 10:13
             var topLogoPanel = Ext.create('Ext.panel.Panel', {
                 id: "topLogoPanel",
                 bodyStyle: {
-                    background: '#3892D3'
+                    background: '#05C705'
                 },
                 border: false,
-                html: '<h1><div style="color:#ffffff;height:40px;line-height:40px;text-indent:60px">Handshake</div></h1>',
+                html: '<h1><div style="color:#ffffff; margin-top: 10px; height:25px; line-height:40px;text-indent:60px"><img src="/images/HandShakelogo.jpg" alt="Error" width="320" height="30"></div></h1>',
                 width: window.screen.width * 0.9
             });
 
             var topInfoPanel = Ext.create('Ext.panel.Panel', {
                 id: "topInfoPanel",
                 bodyStyle: {
-                    background: '#3892D3'
+                    background: '#05C705'
                 },
                 border: false,
-                html: '<div style="color:#ffffff;height:40px;line-height:20px"><br/>joyce Wang<br/>Ver: 0.1</div>',
+                html: '<div style="color:#ffffff;height:40px;line-height:20px"><br/>Joyce Wang<br/>Ver: 0.1</div>',
                 width: window.screen.width * 0.1
             });
 
@@ -50,7 +50,7 @@ Time: 10:13
                 height: '30px',
                 border: false,
                 bodyStyle: {
-                    background: '#3892D3'
+                    background: '#05C705'
                 },
                 layout: {
                     type: 'hbox',
@@ -95,7 +95,7 @@ Time: 10:13
 
             var activityListPanel = Ext.create('Ext.grid.Panel', {
                 id: "activityListPanel",
-                title: 'Activity List',
+                title: 'Event',
                 store: activityListStore,
                 columns: [{
                     text: 'Date',
@@ -108,7 +108,7 @@ Time: 10:13
                 }],
                 region: 'west',
                 collapsible: true,
-                width: '30%',
+                width: '20%',
                 split: true,
                 margin: '0 0 5 0',
                 listeners: {itemclick: onActivityClick}
@@ -150,12 +150,12 @@ Time: 10:13
             });
 
             var cardListToolBar = Ext.create('Ext.toolbar.Toolbar', {
-                width: '100%',
-                region: 'north',
+                width: '40%',
+                region: 'east',
                 layout: {
                     type: 'hbox',
-                    align:'middle',
-                    pack: 'end'
+                    align:'middle'
+                   // pack: 'end'
                 },
                 items: [
                     {
@@ -197,7 +197,7 @@ Time: 10:13
                 }],
                 region: 'center',
                 split: true,
-                margin: '0 0 0 0',
+                margin: '0 0 5 0',
                 dockedItems: [cardListToolBar],
                 listeners: {itemclick: onActivityClick}
             });
@@ -223,10 +223,11 @@ Time: 10:13
             });
 
             var cardPanel = Ext.create('Ext.panel.Panel', {
-                title: 'Card',
+                title: 'Card Detail',
                 //header: false,
-                html: '<p> Hello World! </p>',
-                region: 'south',
+                html: '<p> Card Detail will be displayed </p>',
+                region: 'east',
+                width:'30%',
                 height: 300,
                 collapsible: true,
                 split: true,
