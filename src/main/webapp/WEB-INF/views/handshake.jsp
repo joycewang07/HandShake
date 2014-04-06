@@ -12,7 +12,8 @@ Time: 10:13
     <meta name="description" content="Handshake"/>
     <meta name="author" content="zjy"/>
     <meta name="copyright" content="zjy"/>
-    <link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all-neptune.css"/>
+    <%--<link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all-neptune.css"/>--%>
+    <link rel="stylesheet" type="text/css" href="/extjs/resources/css/ext-all-gray.css"/>
     <script type="text/javascript" src="/extjs/ext-all-dev.js"></script>
     <script type="text/javascript" src="/extjs/locale/ext-lang-en.js"></script>
 
