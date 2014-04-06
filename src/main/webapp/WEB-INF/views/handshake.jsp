@@ -27,7 +27,7 @@ Time: 10:13
             var topLogoPanel = Ext.create('Ext.panel.Panel', {
                 id: "topLogoPanel",
                 bodyStyle: {
-                    background: '#05C705'
+                    background: '#3892D3'
                 },
                 border: false,
                 html: '<h1><div style="color:#ffffff;height:40px;line-height:40px;text-indent:60px">Handshake</div></h1>',
@@ -37,7 +37,7 @@ Time: 10:13
             var topInfoPanel = Ext.create('Ext.panel.Panel', {
                 id: "topInfoPanel",
                 bodyStyle: {
-                    background: '#05C705'
+                    background: '#3892D3'
                 },
                 border: false,
                 html: '<div style="color:#ffffff;height:40px;line-height:20px"><br/>joyce Wang<br/>Ver: 0.1</div>',
@@ -50,7 +50,7 @@ Time: 10:13
                 height: '30px',
                 border: false,
                 bodyStyle: {
-                    background: '#05C705'
+                    background: '#3892D3'
                 },
                 layout: {
                     type: 'hbox',
@@ -72,8 +72,7 @@ Time: 10:13
             var activityListStore = Ext.create('Ext.data.Store', {
                 storeId: 'activityListStore',
                 model: 'ActivityListModel',
-
-//               data: {'items':[
+//                data: {'items':[
 //                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
 //                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
 //                    {date: '03/28/2014', activity:"<span>Activity Name 1 </span></br>Activity Detail</span>"},
@@ -96,7 +95,7 @@ Time: 10:13
 
             var activityListPanel = Ext.create('Ext.grid.Panel', {
                 id: "activityListPanel",
-                title: 'Event',
+                title: 'Activity List',
                 store: activityListStore,
                 columns: [{
                     text: 'Date',
@@ -198,7 +197,7 @@ Time: 10:13
                 }],
                 region: 'center',
                 split: true,
-                margin: '0 0 5 0',
+                margin: '0 0 0 0',
                 dockedItems: [cardListToolBar],
                 listeners: {itemclick: onActivityClick}
             });
@@ -224,12 +223,11 @@ Time: 10:13
             });
 
             var cardPanel = Ext.create('Ext.panel.Panel', {
-                title: 'Card Detail',
+                title: 'Card',
                 //header: false,
-                html: '<p> This will be detail information in business card </p>',
-                region: 'east',
-                width: 250,
-               // height: 300,
+                html: '<p> Hello World! </p>',
+                region: 'south',
+                height: 300,
                 collapsible: true,
                 split: true,
                 margin: '0 0 5 0',
@@ -238,7 +236,6 @@ Time: 10:13
 
             var rightPanel = Ext.create('Ext.panel.Panel', {
                 id: "rightPanel",
-
                 layout: 'border',
                 region: 'center',
                 items: [cardListPanel, cardPanel]
