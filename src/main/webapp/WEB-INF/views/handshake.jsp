@@ -222,16 +222,75 @@ Time: 10:13
                 ]
             });
 
+            var cardForm = Ext.create('Ext.form.Panel', {
+                id: 'cardForm',
+                //url: 'save-form',
+                frame: false,
+                border: false,
+                title: 'User\'s Card',
+                header: false,
+                bodyPadding: '15 35 0 35',
+                collapsible: true,
+                width: 600,
+                fieldDefaults: {
+                    msgTarget: 'side',
+                    labelWidth: 150
+                },
+                defaults: {
+                    anchor: '100%'
+                },
+                items: [{
+                    xtype: 'fieldset',
+                    title: 'Login Information',
+                    defaultType: 'textfield',
+                    layout: 'anchor',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    items :[{
+                        fieldLabel: 'User Name',
+                        name: 'userName',
+                        allowBlank:false
+                    }, {
+                        fieldLabel: 'Password',
+                        name: 'password',
+                        inputType: 'password'
+                    }]
+                }, {
+                    xtype: 'fieldset',
+                    title: 'Contact Information',
+                    collapsible: true,
+                    collapsed: false,
+                    defaultType: 'textfield',
+                    layout: 'anchor',
+                    defaults: {
+                        anchor: '100%'
+                    },
+                    items: [{
+                        fieldLabel: 'Home',
+                        name: 'home'
+                    }, {
+                        fieldLabel: 'Business',
+                        name: 'business'
+                    }, {
+                        fieldLabel: 'Mobile',
+                        name: 'mobile'
+                    }, {
+                        fieldLabel: 'Fax',
+                        name: 'fax'
+                    }]
+                }]
+            });
+
             var cardPanel = Ext.create('Ext.panel.Panel', {
                 title: 'Card',
-                //header: false,
-                html: '<p> Hello World! </p>',
-                region: 'south',
-                height: 300,
+                region: 'east',
                 collapsible: true,
+                width: 400,
+                layout: 'vbox',
                 split: true,
                 margin: '0 0 5 0',
-                dockedItems: [cardToolBar]
+                dockedItems: [cardToolBar, cardForm]
             });
 
             var rightPanel = Ext.create('Ext.panel.Panel', {
