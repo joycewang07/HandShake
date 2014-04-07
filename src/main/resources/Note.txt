@@ -45,9 +45,14 @@ Database:
 user
 activity(user_id, ..)
 user_activity(join user activity, many to many)
+=========================================
+3.0/myCard 维护, 修改图片，上传
+    不需要交互/Card Detail
+2.0/comments:
+0.5/Login
 
-
-
+(-)1/SignUp
+?? LocalThread.
 
 
 
