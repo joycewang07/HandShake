@@ -27,7 +27,7 @@ Time: 10:13
             var topLogoPanel = Ext.create('Ext.panel.Panel', {
                 id: "topLogoPanel",
                 bodyStyle: {
-                    background: '#05C705'
+                    background: '#FFFFFF'
                 },
                 border: false,
                 html: '<h1><div style="color:#ffffff; margin-top: 10px; height:25px; line-height:40px;text-indent:60px"><img src="/images/HandShakelogo.jpg" alt="Error" width="320" height="30"></div></h1>',
@@ -37,7 +37,7 @@ Time: 10:13
             var topInfoPanel = Ext.create('Ext.panel.Panel', {
                 id: "topInfoPanel",
                 bodyStyle: {
-                    background: '#05C705'
+                    background: '#FFFFFF'
                 },
                 border: false,
                 html: '<div style="color:#ffffff;height:40px;line-height:20px"><br/>Joyce Wang<br/>Ver: 0.1</div>',
@@ -50,7 +50,7 @@ Time: 10:13
                 height: '30px',
                 border: false,
                 bodyStyle: {
-                    background: '#05C705'
+                    background: '#FFFFFF'
                 },
                 layout: {
                     type: 'hbox',
