@@ -15,7 +15,7 @@ public class UserEntity {
     @Column(name = "pk_user")
     private Integer userID;
 
-    @Column(name = "user_name")
+    @Column(name = "name")
     private String name;
 
     @Column(name = "password")
@@ -24,8 +24,14 @@ public class UserEntity {
     @Column(name = "user_type")
     private String type;
 
-    @Column(name = "user_card")
+    @Column(name = "card")
     private String card;
+
+    @Column(name = "company")
+    private String company;
+
+    @Column(name = "email")
+    private String email;
 
     @Transient
     private String html;
@@ -80,6 +86,22 @@ public class UserEntity {
 
     public void setHtml(String html) {
         this.html = html;
+    }
+
+    public String getCompany() {
+        return company;
+    }
+
+    public void setCompany(String company) {
+        this.company = company;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public void generateHtml(){

@@ -39,8 +39,8 @@ Time: 10:13
                 background: '#FFFFFF'
             },
             border: false,
-           // html: '<div style="color:#ffffff;height:40px;line-height:20px"><br/>Joyce Wang<br/>Ver: 0.1</div>',
-            html: '<div style="color:#4C4C4C;height:40px;"><b style="font-size: 10px;"><i>Welcome back Paul!</i></b><img style="float: left;" src="/images/paulLogin.jpg" alt="Error" width="35" height="35"></div><img style="float: right; margin-bottom: 1px" src="/images/logout.jpg" alt="Error" width="50" height="25">',
+            html: '<div style="color:#4C4C4C;height:40px;line-height:20px"><br/>Joyce Wang<br/>Ver: 0.1</div>',
+           // html: '<div style="color:#4C4C4C;height:40px;"><b style="font-size: 10px;"><i>Welcome back Paul!</i></b><img style="float: left;" src="/images/paulLogin.jpg" alt="Error" width="35" height="35"></div><img style="float: right; margin-bottom: 1px" src="/images/logout.jpg" alt="Error" width="50" height="25">',
 
             width: window.screen.width * 0.1
         });
@@ -169,6 +169,20 @@ Time: 10:13
                     height: 30,
                     handler: function () {
                         //Ext.Msg.alert('Popup window', 'Display and edit your button');
+
+                        //ajax myCardDisplay
+                        Ext.Ajax.request({
+                            url: '/mycard/display',
+                            success: function(response, opts) {
+                                var myCardInformation = Ext.decode(response.responseText);
+                                var myCardForm = Ext.getCmp("myCardForm").getForm();
+                                myCardForm.setValues(myCardInformation);
+                                //console.dir(obj);
+                            },
+                            failure: function(response, opts) {
+                                console.log('server-side failure with status code ' + response.status);
+                            }
+                        });
                         myCardWindow.show();
                     }
                 },
@@ -266,22 +280,31 @@ Time: 10:13
                 labelAlign: 'top',
                 msgTarget: 'side'
             },
-
-            items: [
-                {
+            items: [{
                     xtype: 'container',
                     anchor: '100%',
                     layout: 'hbox',
-                    items: [
-                        {
+                    items:[{
+                        xtype: 'container',
+                        flex: 1,
+                        layout: 'anchor',
+                        items: [{
                             xtype: 'textfield',
-                            fieldLabel: 'Full Name',
-                            // allowBlank: false,
+                            fieldLabel: 'Name',
                             name: 'name',
-                            anchor: '95%'
-                            //value: 'Don'
+                            anchor:'95%'
                         },
+                          {
+                                xtype:'textfield',
+                                fieldLabel: 'Title',
+                                name: 'title',
+                                anchor:'95%'
+                            }]},
                         {
+                            xtype: 'container',
+                            flex: 1,
+                            layout: 'anchor',
+                            items: [{
                             xtype: 'textfield',
                             fieldLabel: 'Company',
                             name: 'company',
@@ -294,10 +317,11 @@ Time: 10:13
                             name: 'email',
                             vtype: 'email',
                             anchor: '100%'
-                        }
-                    ]},
+                        }]
+                        }]
+                    },
                 {
-                    xtype: 'htmleditor',
+                    xtype: 'textarea',
                     name: 'bio',
                     fieldLabel: 'Biography',
                     //height: 200,
@@ -308,7 +332,24 @@ Time: 10:13
                 {
                     text: 'Save',
                     handler: function () {
-                        this.up('form').getForm().isValid();
+                        if(this.up('form').getForm().isValid()){
+                            //ajax myCardDisplay
+                            Ext.Ajax.request({
+                                url: '/mycard/update',
+                                success: function(response, opts) {
+                                    var myCardInformation = Ext.decode(response.responseText);
+                                    var myCardForm = Ext.getCmp("myCardForm").getForm();
+                                    myCardForm.setValues(myCardInformation);
+
+                                    //console.dir(obj);
+                                },
+                                failure: function(response, opts) {
+                                    console.log('server-side failure with status code ' + response.status);
+                                }
+                            });
+                        }
+
+
                     }
                 },
                 {
@@ -321,6 +362,8 @@ Time: 10:13
                 }
             ]
         });
+
+
 
         var myCardWindow= Ext.create('Ext.window.Window', {
             id: "myCardWindow",
