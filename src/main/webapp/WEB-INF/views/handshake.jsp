@@ -124,7 +124,10 @@ Time: 10:13
                 {name: 'userID', type: 'int'},
                 {name: 'type', type: 'string'},
                 {name: 'card', type: 'string'},
-                {name: 'html', type: 'string'}
+                {name: 'company', type: 'string'},
+                {name: 'email', type: 'string'},
+                {name: 'title', type: 'string'},
+                {name: 'update', type: 'boolean'}
             ]
         });
 
@@ -173,6 +176,7 @@ Time: 10:13
                         //ajax myCardDisplay
                         Ext.Ajax.request({
                             url: '/mycard/display',
+
                             success: function(response, opts) {
                                 var myCardInformation = Ext.decode(response.responseText);
                                 var myCardForm = Ext.getCmp("myCardForm").getForm();
@@ -333,11 +337,13 @@ Time: 10:13
                     text: 'Save',
                     handler: function () {
                         if(this.up('form').getForm().isValid()){
+
                             //ajax myCardDisplay
                             Ext.Ajax.request({
                                 url: '/mycard/update',
+
                                 success: function(response, opts) {
-                                    var myCardInformation = Ext.decode(response.responseText);
+                                    var myCardInformation1 = Ext.decode(response.responseText);
                                     var myCardForm = Ext.getCmp("myCardForm").getForm();
                                     myCardForm.setValues(myCardInformation);
 

@@ -15,6 +15,9 @@ public class UserEntity {
     @Column(name = "pk_user")
     private Integer userID;
 
+    @Column(name = "username")
+    private String username;
+
     @Column(name = "name")
     private String name;
 
@@ -33,8 +36,14 @@ public class UserEntity {
     @Column(name = "email")
     private String email;
 
+    @Column(name = "title")
+    private String title;
+
     @Transient
     private String html;
+
+    @Transient
+    private boolean update;
 
     public UserEntity() {
     }
@@ -46,6 +55,14 @@ public class UserEntity {
 
     public void setUserID(Integer userID) {
         this.userID = userID;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getName() {
@@ -104,6 +121,22 @@ public class UserEntity {
         this.email = email;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public boolean isUpdate() {
+        return update;
+    }
+
+    public void setUpdate(boolean update) {
+        this.update = update;
+    }
+
     public void generateHtml(){
         //StringBuilder stringBuilder = new StringBuilder();
 
@@ -114,4 +147,6 @@ public class UserEntity {
 
         this.setHtml(businessCard);
     }
+
+
 }

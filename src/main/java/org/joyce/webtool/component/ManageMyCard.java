@@ -24,10 +24,6 @@ public class ManageMyCard {
     @Autowired
     private AccountService accountService;
 
-
-
-    private String retrieveCurrentUserByUserId = " from UserEntity where userID = ? ";
-
    //when hit on my card, business card info should be loaded from database
     @ResponseBody
     @RequestMapping(value="display", method= RequestMethod.GET)
@@ -46,12 +42,13 @@ public class ManageMyCard {
     private void updateMyCard(@RequestBody UserEntity userEntity, HttpServletRequest request){
         Integer userId= accountService.getCurrentUser(request);
         if(userId==null){
-            //Warning Login
+              userEntity.setUpdate(false);
         }
-
+        else{
         Session session= sessionFactory.openSession();
         session.update(userEntity);
-
+        userEntity.setUpdate(true);
+        }
 
     }
 
