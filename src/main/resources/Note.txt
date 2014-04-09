@@ -51,6 +51,7 @@ user_activity(join user activity, many to many)
 2.0/comments:
 0.5/Login
 
+
 (-)1/SignUp
 ?? LocalThread.
 

@@ -30,14 +30,14 @@ public class ManageMyCard {
     private UserEntity displayMyCard(HttpServletRequest request){
         Integer userId= accountService.getCurrentUser(request);
         if(userId==null){
-           new ResponseEntity().setSuccess(false);
+           //new ResponseEntity().setSuccess(false);
         }
         Session session= sessionFactory.openSession();
         UserEntity user= (UserEntity)session.get(UserEntity.class, userId);
                 return user;
     }
 
-
+    @ResponseBody
     @RequestMapping(value="update", method= RequestMethod.POST)
     private void updateMyCard(@RequestBody UserEntity userEntity, HttpServletRequest request){
         Integer userId= accountService.getCurrentUser(request);

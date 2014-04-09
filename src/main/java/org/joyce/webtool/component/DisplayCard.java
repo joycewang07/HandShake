@@ -34,7 +34,7 @@ public class DisplayCard {
 
 
 
-    @ResponseBody
+     @ResponseBody
      @RequestMapping(method = RequestMethod.GET)
      public ArrayList<UserEntity> getCardList(int activityId, HttpServletRequest request){
         int currentUserId= accountService.getCurrentUser(request);

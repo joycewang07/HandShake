@@ -296,6 +296,7 @@ Time: 10:13
                             xtype: 'textfield',
                             fieldLabel: 'Name',
                             name: 'name',
+                            readOnly: true,
                             anchor:'95%'
                         },
                           {
@@ -342,13 +343,15 @@ Time: 10:13
                             Ext.Ajax.request({
                                 url: '/mycard/update',
 
+                              //  if(myCardInformation.getSuccess){
                                 success: function(response, opts) {
-                                    var myCardInformation1 = Ext.decode(response.responseText);
+                                    var myCardInformation = Ext.decode(response.responseText);
                                     var myCardForm = Ext.getCmp("myCardForm").getForm();
                                     myCardForm.setValues(myCardInformation);
 
                                     //console.dir(obj);
                                 },
+                                    //},
                                 failure: function(response, opts) {
                                     console.log('server-side failure with status code ' + response.status);
                                 }
