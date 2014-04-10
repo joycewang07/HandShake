@@ -122,8 +122,10 @@ Time: 10:13
             extend: 'Ext.data.Model',
             fields: [
                 {name: 'userID', type: 'int'},
+                {name: 'name', type: 'string'},
                 {name: 'type', type: 'string'},
                 {name: 'card', type: 'string'},
+                {name: 'html', type: 'string'},
                 {name: 'company', type: 'string'},
                 {name: 'email', type: 'string'},
                 {name: 'title', type: 'string'},
@@ -224,7 +226,7 @@ Time: 10:13
             split: true,
             margin: '0 0 5 0',
             dockedItems: [cardListToolBar],
-            listeners: {itemclick: onActivityClick}
+            listeners: {itemclick: onCardClick}
         });
 
         var cardToolBar = Ext.create('Ext.toolbar.Toolbar', {
@@ -233,23 +235,106 @@ Time: 10:13
             layout: {
                 type: 'hbox',
                 align: 'middle'
-            },
-            items: [
-                {
-                    xtype: 'button',
-                    text: 'Save changes',
-                    width: 150,
-                    height: 30,
-                    handler: function () {
-                        Ext.Msg.alert('Popup window', 'Save changes');
-                    }
-                }
-            ]
+            }
         });
+
+        //card form, Card Detail
+        var cardDetailForm = Ext.create('Ext.form.Panel', {
+            id: 'cardDetailForm',
+            //url: 'save-form',
+            frame: false,
+            border: false,
+          //  title: 'User\'s Card',
+            header: false,
+            bodyPadding: '15 35 0 35',
+            collapsible: true,
+            width: 600,
+            fieldDefaults: {
+                msgTarget: 'side',
+                labelWidth: 80
+            },
+            defaults: {
+                anchor: '100%'
+            },
+            items: [{
+                xtype: 'fieldset',
+                title: 'User Information',
+                defaultType: 'textfield',
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%'
+                },
+                items :[{
+                    fieldLabel: 'Name',
+                    name: 'name',
+                    allowBlank:false,
+                    readOnly: true
+                }, {
+                    fieldLabel: 'Company',
+                    name: 'company',
+                    allowBlank:false,
+                    readOnly: true
+                },{
+                    fieldLabel: 'Title',
+                    name: 'title',
+                    allowBlank:false,
+                    readOnly: true
+                },{
+                    fieldLabel: 'Email',
+                    name: 'email',
+                    allowBlank:false,
+                    readOnly: true
+                }]
+            }, {
+                xtype: 'fieldset',
+                title: 'Note',
+                collapsible: true,
+                collapsed: false,
+                defaultType: 'textarea',
+                layout: 'anchor',
+                defaults: {
+                    anchor: '100%'
+                },
+                items: [{
+                    fieldLabel: 'Note',
+                    name: 'note',
+                    id: "noteTextArea"
+                  //  storeId: 'commentStore'
+                }]
+            }],
+
+            buttons: [{
+                    text: 'Save',
+                    handler: function () {
+                        if(this.up('form').getForm().isValid()){
+                            //ajax
+                            var selectedUserId = Ext.getCmp("cardListPanel").getSelectionModel().getSelection()[0].get("userID");
+                            var commentEntity = {user2Id:selectedUserId, comment: this.up('form').getForm().findField("noteTextArea").getValue()};
+                            Ext.Ajax.request({
+                                url: '/comment/update',
+                                headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+                                params: Ext.encode(commentEntity),
+                                method: 'POST',
+                                success: function(response, opts) {
+//                                    //encode: js-->json
+//                                    var myCardInformation = Ext.decode(response.responseText);
+//                                    var myCardForm = Ext.getCmp("myCardForm").getForm();
+//                                    myCardForm.setValues(myCardInformation);
+                                },
+                                failure: function(response, opts) {
+                                    console.log('server-side failure with status code ' + response.status);
+                                }
+                            });
+                        }
+                    }
+                }]
+        });
+
 
         var cardPanel = Ext.create('Ext.panel.Panel', {
             title: 'Card Detail',
             //header: false,
+            layout: 'vbox',
             html: '<p> Card Detail will be displayed </p>',
             region: 'east',
             width: '30%',
@@ -257,7 +342,7 @@ Time: 10:13
             collapsible: true,
             split: true,
             margin: '0 0 5 0',
-            dockedItems: [cardToolBar]
+            dockedItems: [cardToolBar, cardDetailForm]
         });
 
         var rightPanel = Ext.create('Ext.panel.Panel', {
@@ -333,25 +418,19 @@ Time: 10:13
                     anchor: '100%'
                 }
             ],
-            buttons: [
-                {
+            buttons: [{
                     text: 'Save',
                     handler: function () {
                         if(this.up('form').getForm().isValid()){
-
-                            //ajax myCardDisplay
+                            //ajax myCardUpdate
                             Ext.Ajax.request({
                                 url: '/mycard/update',
-
-                              //  if(myCardInformation.getSuccess){
+                                headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+                                method:'POST',
                                 success: function(response, opts) {
-                                    var myCardInformation = Ext.decode(response.responseText);
-                                    var myCardForm = Ext.getCmp("myCardForm").getForm();
-                                    myCardForm.setValues(myCardInformation);
 
-                                    //console.dir(obj);
                                 },
-                                    //},
+
                                 failure: function(response, opts) {
                                     console.log('server-side failure with status code ' + response.status);
                                 }
@@ -395,6 +474,27 @@ Time: 10:13
         function onActivityClick(component, record, item, index, e, eOpts) {
             cardListStore.getProxy().extraParams = {activityId: record.get('activityId')};
             cardListStore.load();
+        }
+
+        function onCardClick(component, record, item, index, e, eOpts) {
+            cardDetailForm.loadRecord(record);
+            Ext.Ajax.request({
+                url: '/comment/display',
+                params: {user2Id: record.get('userID')},
+                method:'GET',
+                success: function(response, opts) {
+                    var commentInfo = Ext.decode(response.responseText);
+                     Ext.getCmp("cardDetailForm").getForm().findField("noteTextArea").setValue(commentInfo.comment);
+
+                    //console.dir(obj);
+                },
+                failure: function(response, opts) {
+                    console.log('server-side failure with status code ' + response.status);
+                }
+            });
+
+
+
         }
     }
 
