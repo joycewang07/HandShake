@@ -123,13 +123,13 @@ Time: 10:13
             fields: [
                 {name: 'userID', type: 'int'},
                 {name: 'name', type: 'string'},
-                {name: 'type', type: 'string'},
-                {name: 'card', type: 'string'},
+                {name: 'cardId', type: 'int'},
+                {name: 'image', type: 'string'},
                 {name: 'html', type: 'string'},
                 {name: 'company', type: 'string'},
                 {name: 'email', type: 'string'},
                 {name: 'title', type: 'string'},
-                {name: 'update', type: 'boolean'}
+                {name: 'success', type: 'boolean'}
             ]
         });
 
@@ -377,7 +377,20 @@ Time: 10:13
                         xtype: 'container',
                         flex: 1,
                         layout: 'anchor',
-                        items: [{
+                        items: [
+                            {
+                                xtype: 'hiddenfield',
+                                name: 'cardId'
+                            },
+                            {
+                                xtype: 'hiddenfield',
+                                name: 'userID'
+                            },
+                            {
+                                xtype: 'hiddenfield',
+                                name: 'image'
+                            },
+                            {
                             xtype: 'textfield',
                             fieldLabel: 'Name',
                             name: 'name',
@@ -412,8 +425,8 @@ Time: 10:13
                     },
                 {
                     xtype: 'textarea',
-                    name: 'bio',
-                    fieldLabel: 'Biography',
+                    name: 'phone',
+                    fieldLabel: 'Phone',
                     //height: 200,
                     anchor: '100%'
                 }
@@ -421,15 +434,20 @@ Time: 10:13
             buttons: [{
                     text: 'Save',
                     handler: function () {
+
                         if(this.up('form').getForm().isValid()){
                             //ajax myCardUpdate
+//                            var cardEntity = {userID:d, name: this.up('form').getForm().findField("noteTextArea").getValue(),
+//                                image:, company,email, title};
+                            var myUpdateFormInfo = this.up('form').getForm().getValues();
                             Ext.Ajax.request({
                                 url: '/mycard/update',
+                                params: Ext.encode(myUpdateFormInfo),
                                 headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
                                 method:'POST',
-                                success: function(response, opts) {
 
-                                },
+                                success: function(response, opts) {
+                         },
 
                                 failure: function(response, opts) {
                                     console.log('server-side failure with status code ' + response.status);

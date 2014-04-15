@@ -42,6 +42,7 @@ public class DisplayComment {
         }
 
         Session session=sessionFactory.openSession();
+
         List<CommentEntity> comment = session.createQuery(retrieveComment).setParameter(0,currentId).setParameter(1,user2Id).list();
         if(comment.size()==0){
             CommentEntity commentEntity = new CommentEntity();

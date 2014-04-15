@@ -1,8 +1,10 @@
 package org.joyce.webtool.model;
 
-import org.eclipse.jetty.server.Authentication;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 14-3-29.
@@ -18,36 +20,24 @@ public class UserEntity {
     @Column(name = "username")
     private String username;
 
-    @Column(name = "name")
-    private String name;
-
     @Column(name = "password")
     private String password;
 
     @Column(name = "user_type")
     private String type;
 
-    @Column(name = "card")
-    private String card;
-
-    @Column(name = "company")
-    private String company;
-
-    @Column(name = "email")
-    private String email;
-
-    @Column(name = "title")
-    private String title;
+    @JsonIgnore
+    @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = {CascadeType.ALL} )
+    private List<CardEntity> cardList = new ArrayList<>();
 
     @Transient
-    private String html;
+    private String repeatUserPassword;
 
     @Transient
-    private boolean update;
+    private boolean success;
 
     public UserEntity() {
     }
-
 
     public Integer getUserID() {
         return userID;
@@ -63,14 +53,6 @@ public class UserEntity {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPassword() {
@@ -89,64 +71,27 @@ public class UserEntity {
         this.type = type;
     }
 
-    public String getCard() {
-        return card;
+    public List<CardEntity> getCardList() {
+        return cardList;
     }
 
-    public void setCard(String card) {
-        this.card = card;
+    public void setCardList(List<CardEntity> cardList) {
+        this.cardList = cardList;
     }
 
-    public String getHtml() {
-        return html;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setHtml(String html) {
-        this.html = html;
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 
-    public String getCompany() {
-        return company;
+    public String getRepeatUserPassword() {
+        return repeatUserPassword;
     }
 
-    public void setCompany(String company) {
-        this.company = company;
+    public void setRepeatUserPassword(String repeatUserPassword) {
+        this.repeatUserPassword = repeatUserPassword;
     }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isUpdate() {
-        return update;
-    }
-
-    public void setUpdate(boolean update) {
-        this.update = update;
-    }
-
-    public void generateHtml(){
-        //StringBuilder stringBuilder = new StringBuilder();
-
-        String businessCardTemplate = "<span><img src=$$$ alt=\"Error\" width=\"200\" height=\"100\"></span>";
-        //String businessCardTemplate = "<span><b>???</b><br><img src=$$$ alt=\"Error\" width=\"200\" height=\"100\"></span>";
-        String businessCard = businessCardTemplate.replace("$$$", this.card);
-        //String businessCard = businessCardTemplate.replace("???", this.name).replace("$$$", this.card);
-
-        this.setHtml(businessCard);
-    }
-
-
 }

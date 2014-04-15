@@ -4,6 +4,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joyce.webtool.model.ActivityEntity;
+import org.joyce.webtool.model.CardEntity;
 import org.joyce.webtool.model.RelationshipEntity;
 import org.joyce.webtool.model.UserEntity;
 import org.joyce.webtool.service.AccountService;
@@ -23,7 +24,7 @@ import java.util.List;
  */
 
 @Controller
-@RequestMapping(value="/cardList")
+@RequestMapping(value = "/cardList")
 public class DisplayCard {
 
     private String retrieveUserListByCurUserId = " from RelationshipEntity where fkUser1 = ? and fkActivity.activityId = ? ";
@@ -33,28 +34,30 @@ public class DisplayCard {
     private AccountService accountService;
 
 
-
-     @ResponseBody
-     @RequestMapping(method = RequestMethod.GET)
-     public ArrayList<UserEntity> getCardList(int activityId, HttpServletRequest request){
-        int currentUserId= accountService.getCurrentUser(request);
-        if(currentUserId==0){
+    @ResponseBody
+    @RequestMapping(method = RequestMethod.GET)
+    public ArrayList<CardEntity> getCardList(int activityId, HttpServletRequest request) {
+        int currentUserId = accountService.getCurrentUser(request);
+        if (currentUserId == 0) {
             //Plz login to use service
         }
-        Session session=sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
 
-        List<RelationshipEntity> relationshipEntityList = session.createQuery(retrieveUserListByCurUserId).setParameter(0, currentUserId).setParameter(1, 1).list();
-        ArrayList<UserEntity> userList= new ArrayList<>();
+        List<RelationshipEntity> relationshipEntityList = session.createQuery(retrieveUserListByCurUserId).setParameter(0, currentUserId).setParameter(1, activityId).list();
+        ArrayList<CardEntity> cardList = new ArrayList<>();
 
-        for(RelationshipEntity relationshipEntity: relationshipEntityList){
-            UserEntity userEntity= relationshipEntity.getFkUser2();
-            userEntity.generateHtml();
-            userList.add(userEntity);
+        for (RelationshipEntity relationshipEntity : relationshipEntityList) {
+            UserEntity userEntity = relationshipEntity.getFkUser2();
+            for (CardEntity cardEntity : userEntity.getCardList()) {
+                cardEntity.generateHtml();
+                cardList.add(cardEntity);
+            }
+
+
         }
 
-        return userList;
+        return cardList;
     }
-
 
 
 }
