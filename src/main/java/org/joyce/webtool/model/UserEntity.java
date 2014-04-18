@@ -11,8 +11,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "user", schema = "", catalog = "")
+@Inheritance(strategy = InheritanceType.JOINED)
 public class UserEntity {
-
     @Id
     @Column(name = "pk_user")
     private Integer userID;
@@ -25,10 +25,6 @@ public class UserEntity {
 
     @Column(name = "user_type")
     private String type;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "userEntity", fetch = FetchType.EAGER, cascade = {CascadeType.ALL} )
-    private List<CardEntity> cardList = new ArrayList<>();
 
     @Transient
     private String repeatUserPassword;
@@ -69,14 +65,6 @@ public class UserEntity {
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public List<CardEntity> getCardList() {
-        return cardList;
-    }
-
-    public void setCardList(List<CardEntity> cardList) {
-        this.cardList = cardList;
     }
 
     public boolean isSuccess() {

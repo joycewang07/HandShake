@@ -3,10 +3,7 @@ package org.joyce.webtool.component;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.joyce.webtool.model.ActivityEntity;
-import org.joyce.webtool.model.CardEntity;
-import org.joyce.webtool.model.RelationshipEntity;
-import org.joyce.webtool.model.UserEntity;
+import org.joyce.webtool.model.*;
 import org.joyce.webtool.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +31,7 @@ public class DisplayCard {
     private AccountService accountService;
 
 
+    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(method = RequestMethod.GET)
     public ArrayList<CardEntity> getCardList(int activityId, HttpServletRequest request) {
@@ -47,13 +45,11 @@ public class DisplayCard {
         ArrayList<CardEntity> cardList = new ArrayList<>();
 
         for (RelationshipEntity relationshipEntity : relationshipEntityList) {
-            UserEntity userEntity = relationshipEntity.getFkUser2();
-            for (CardEntity cardEntity : userEntity.getCardList()) {
+            IndividualEntity individualEntity = relationshipEntity.getFkUser2();
+            for (CardEntity cardEntity : individualEntity.getCardList()) {
                 cardEntity.generateHtml();
                 cardList.add(cardEntity);
             }
-
-
         }
 
         return cardList;

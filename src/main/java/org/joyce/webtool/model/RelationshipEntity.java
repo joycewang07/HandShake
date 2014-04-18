@@ -19,7 +19,7 @@ public class RelationshipEntity {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     @JoinColumn(name = "fk_user2")
-    private UserEntity fkUser2;
+    private IndividualEntity fkUser2;
 
 
     public Integer getPkRelationship() {
@@ -50,11 +50,11 @@ public class RelationshipEntity {
     }
 
 
-    public UserEntity getFkUser2() {
+    public IndividualEntity getFkUser2() {
         return fkUser2;
     }
 
-    public void setFkUser2(UserEntity fkUser2) {
+    public void setFkUser2(IndividualEntity fkUser2) {
         this.fkUser2 = fkUser2;
     }
 

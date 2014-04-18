@@ -3,6 +3,7 @@ package org.joyce.webtool.component;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.joyce.webtool.model.CardEntity;
+import org.joyce.webtool.model.IndividualEntity;
 import org.joyce.webtool.model.ResponseEntity;
 import org.joyce.webtool.model.UserEntity;
 import org.joyce.webtool.service.AccountService;
@@ -37,8 +38,8 @@ public class ManageMyCard {
         }
         Session session = sessionFactory.openSession();
         //get only get from primary key
-        UserEntity userEntity = (UserEntity) session.get(UserEntity.class, userId);
-        CardEntity card = (CardEntity) userEntity.getCardList().get(0);
+        IndividualEntity individualEntity = (IndividualEntity) session.get(IndividualEntity.class, userId);
+        CardEntity card = individualEntity.getCardList().get(0);
 
         return card;
     }
@@ -52,8 +53,8 @@ public class ManageMyCard {
         } else {
 
             Session session = sessionFactory.openSession();
-            UserEntity userEntity = (UserEntity) session.get(UserEntity.class, userId);
-            cardEntity.setUserEntity(userEntity);
+            IndividualEntity individualEntity = (IndividualEntity) session.get(IndividualEntity.class, userId);
+            cardEntity.setIndividualEntity(individualEntity);
             session.merge(cardEntity);
 
             session.flush();

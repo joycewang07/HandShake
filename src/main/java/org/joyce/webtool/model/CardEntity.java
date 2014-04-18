@@ -22,7 +22,7 @@ public class CardEntity {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_userId")
-    private UserEntity userEntity;
+    private IndividualEntity individualEntity;
 
     @Column(name = "name")
     private String name;
@@ -56,17 +56,16 @@ public class CardEntity {
         this.cardId = cardId;
     }
 
-    public UserEntity getUserEntity() {
-        return userEntity;
+    public IndividualEntity getIndividualEntity() {
+        return individualEntity;
     }
 
-    public void setUserEntity(UserEntity userEntity) {
-        this.userEntity = userEntity;
+    public void setIndividualEntity(IndividualEntity individualEntity) {
+        this.individualEntity = individualEntity;
     }
-
 
     public Integer getUserID() {
-        return userEntity.getUserID();
+        return individualEntity.getUserID();
     }
 
     public void setUserID(Integer userId) {

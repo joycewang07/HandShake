@@ -30,6 +30,7 @@ public class DisplayActivity {
     public DisplayActivity() {
     }
 
+    @SuppressWarnings("unchecked")
     @ResponseBody
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public List<ActivityEntity> getActivityList(HttpServletRequest request) {

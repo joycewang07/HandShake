@@ -1,6 +1,10 @@
 package org.joyce.webtool.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 14-3-29.
@@ -15,15 +19,16 @@ public class ActivityEntity {
     private String name;
     @Column(name = "activity_date")
     private String date;
-    @Column(name = "activity_organizer")
-    private String organizer;
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "fk_company")
+    private CompanyEntity companyEntity;
     @Column(name = "activity_industry")
     private String industry;
 
 
     public ActivityEntity() {
     }
-
 
 
     public Integer getActivityId() {
@@ -50,15 +55,13 @@ public class ActivityEntity {
         this.date = date;
     }
 
-    public String getOrganizer() {
-        return organizer;
+    public CompanyEntity getCompanyEntity() {
+        return companyEntity;
     }
 
-    public void setOrganizer(String organizer) {
-        this.organizer = organizer;
+    public void setCompanyEntity(CompanyEntity companyEntity) {
+        this.companyEntity = companyEntity;
     }
-
-
 
     public String getIndustry() {
         return industry;
