@@ -12,7 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "company", schema = "", catalog = "")
-public class CompanyEntity extends UserEntity{
+public class CompanyEntity extends UserEntity {
     @Column(name = "company_name")
     private String companyName;
     @Column(name = "address")

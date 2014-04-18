@@ -25,7 +25,7 @@ Ext.require([
                // title: templateStore.getById(203).get("label"),
                 title: "login",
                 id:"loginFormPanel",
-                bodyPadding: 15,
+                bodyPadding: 25,
                 width: 400,
                 url: 'login',
                 header: false,
@@ -49,26 +49,6 @@ Ext.require([
                         fieldLabel: 'Password',
                         name: 'password',
                         inputType: 'password'
-                    }, {
-                        xtype      : 'fieldcontainer',
-                        fieldLabel : 'Type',
-                        defaultType: 'radiofield',
-                        defaults: {
-                            flex: 2
-                        },
-                        layout: 'hbox',
-                        items: [
-                            {
-                                boxLabel  : 'Individual',
-                                name      : 'Type',
-                                inputValue: 'Individual',
-                                id        : 'individual'
-                            }, {
-                                boxLabel  : 'Company',
-                                name      : 'Type',
-                                inputValue: 'Company',
-                                id        : 'company'
-                            }]
                     },{
                         xtype: 'label',
                         itemId: 'promptLabel'

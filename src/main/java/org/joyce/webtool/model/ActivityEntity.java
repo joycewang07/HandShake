@@ -19,10 +19,12 @@ public class ActivityEntity {
     private String name;
     @Column(name = "activity_date")
     private String date;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "fk_company")
     private CompanyEntity companyEntity;
+
     @Column(name = "activity_industry")
     private String industry;
 
