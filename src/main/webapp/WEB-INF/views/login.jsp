@@ -28,6 +28,7 @@ Ext.require([
                 bodyPadding: 25,
                 width: 400,
                 url: 'login',
+                autoScroll: true,
                 header: false,
                 buttonAlign: 'center',
                 minButtonWidth: 120,
@@ -50,11 +51,29 @@ Ext.require([
                         name: 'password',
                         inputType: 'password'
                     },{
+                        xtype      : 'fieldcontainer',
+                        fieldLabel : 'Type',
+                        defaultType: 'radiofield',
+                        defaults: {
+                            flex: 1
+                        },
+                        layout: 'hbox',
+                        items: [{
+                                boxLabel  : 'Individual',
+                                name      : 'Type',
+                                inputValue: 'Individual',
+                                id        : 'loginIndi'
+                            }, {
+                                boxLabel  : 'Company',
+                                name      : 'Type',
+                                inputValue: 'Company',
+                                id        : 'loginCmpy'
+                        }]
+                    },{
                         xtype: 'label',
                         itemId: 'promptLabel'
                     }
                 ],
-
                 buttons: [{
                         text:'Sign Up?',
                         listeners:{
@@ -63,8 +82,7 @@ Ext.require([
                                 Ext.getCmp("registerWindow").show();
                                 }
                             }
-
-                },{
+                    },{
                         text: 'Login',
                         handler: function () {
                             // The getForm() method returns the Ext.form.Basic instance:
@@ -72,7 +90,11 @@ Ext.require([
                                 clientValidation: true,
                                 url: '/login/check',
                                 success: function (form, action) {
+                                    if(Ext.getCmp("loginIndi").getValue()){
                                     window.location.href="/";
+                                    }else{
+                                        window.location.href ="/company";
+                                    }
                                     //loginFormPanel.getComponent('promptLabel').setText('<div style="color:red">Success</div>', false);
                                 },
                                 failure: function (form, action) {
@@ -97,20 +119,21 @@ Ext.require([
 
             Ext.tip.QuickTipManager.init();
 
-            var categoryStore = Ext.create('Ext.data.Store', {
-             //   storeId: 'categoryStore',
-                fields: ['abbr','name'],
-                data : [
-                    { "abbr":" CU", "name":"Company User"},
-                    {"abbr":" IU", "name":"Individual User"}
-                ]
-            });
+//            var categoryStore = Ext.create('Ext.data.Store', {
+//             //   storeId: 'categoryStore',
+//                fields: ['abbr','name'],
+//                data : [
+//                    { "abbr":" CU", "name":"Company User"},
+//                    {"abbr":" IU", "name":"Individual User"}
+//                ]
+//            });
 
             var registerFormPanel = Ext.create('Ext.form.Panel', {
 
                 title: "register",
                 id:"registerFormPanel",
-                frame: true,
+                autoScroll: true,
+                frame: false,
                 width: 350,
                 bodyPadding: 10,
                 bodyBorder: true,
@@ -132,28 +155,11 @@ Ext.require([
                     fieldLabel: 'User Name',
                     allowBlank: false,
                     minLength: 6
-                },  {
-                    xtype: 'combobox',
-                    fieldLabel: 'Category',
-                    id: "type",
-                    name: 'category',
-                    store: categoryStore ,
-                    valueField: 'abbr',
-//                    data: {'items':[
-//                    {activity:"<span>IU </span>"},
-//                    {activity:"<span>CU </span>"}
-//                    ]},
-                    displayField: 'Category',
-                    typeAhead: true,
-                    queryMode: 'local',
-                    emptyText: 'Select a category...'
-
-                },, {
+                }, {
                     xtype: 'textfield',
                     name: 'password1',
                     id: "password",
                     fieldLabel: 'Password',
-
                     inputType: 'password',
                     style: 'margin-top:15px',
                     allowBlank: false,
@@ -163,21 +169,72 @@ Ext.require([
                     name: 'password2',
                     id: "repeatUserPassword",
                     fieldLabel: 'Repeat Password',
-
                     inputType: 'password',
                     allowBlank: false
                     /**
                      * Custom validator implementation - checks that the value matches what was entered into
                      * the password1 field.
                      */
-    //                validator: function(value) {
-     //                  var password1 =Ext.getCmp("registerFormPanel").getForm().findField("firstpassword");
-      //                 return (value === password1.getValue()) ? true : 'Passwords do not match.'
-      //              }//pswd validator
-                },//pswd2
-
-                    {
-                        xtype: 'checkboxfield',
+                    //                validator: function(value) {
+                    //                  var password1 =Ext.getCmp("registerFormPanel").getForm().findField("firstpassword");
+                    //                 return (value === password1.getValue()) ? true : 'Passwords do not match.'
+                    //              }//pswd validator
+                },  {
+                    xtype      : 'fieldcontainer',
+                    fieldLabel : 'Type',
+                    defaultType: 'radiofield',
+                    defaults: {
+                        flex: 1
+                    },
+                    layout: 'hbox',
+                    items: [
+                        {
+                            boxLabel  : 'Individual',
+                            name      : 'Type',
+                            inputValue: 'Individual',
+                            id        : 'individual'
+                        }, {
+                            boxLabel  : 'Company',
+                            name      : 'Type',
+                            inputValue: 'Company',
+                            id        : 'company',
+                            handler: function(){
+                                //var tru = this.getValue();
+                                if(this.getValue()){
+                                  //  var it = Ext.getCmp("companyname");
+                                    Ext.getCmp("companyname").show();
+                                    Ext.getCmp("address").show();
+                                    Ext.getCmp("tel").show();
+                                }else{}
+                            }
+                        }
+                    ]
+                }, {
+                    xtype: 'textfield',
+                    name: 'company name',
+                    id: 'companyname',
+                    hidden: true,
+                    fieldLabel: 'Company Name',
+                    // allowBlank: false,
+                    minLength: 6
+                },{
+                    xtype: 'textfield',
+                    name: 'address',
+                    id: "address",
+                    hidden: true,
+                    fieldLabel: 'Address',
+                    //  allowBlank: false,
+                    minLength: 6
+                },{
+                    xtype: 'textfield',
+                    name: 'Tele',
+                    id: "tel",
+                    hidden: true,
+                    fieldLabel: 'Telephone',
+                    //allowBlank: false,
+                    minLength: 6
+                },
+                      { xtype: 'checkboxfield',
                         name: 'acceptTerms',
                         fieldLabel: 'Terms of Use',
                         hideLabel: true,
@@ -197,11 +254,14 @@ Ext.require([
                         text: 'Submit Registration',
                        // width: 140,
                         handler: function() {
+                        // var   individual = Ext.getCmp("individual").getValue();
                             var form = this.up('form').getForm();
                             var regisform = Ext.getCmp("registerFormPanel").getForm();
-                            var newUserInfo= {userID: 1, username:regisform.findField("username").getValue() ,password:regisform.findField("password").getValue(), type:"individual"}
+                            if(Ext.getCmp("individual").getValue()){
+
+                            var newUserInfo= {userID: 1, username:regisform.findField("username").getValue(),password:regisform.findField("password").getValue(), type:"individual"};
                                 Ext.Ajax.request({
-                                    url: '/signup',
+                                    url: '/signup/individual',
                                     params: Ext.encode(newUserInfo),
                                     headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
                                     method:'POST',
@@ -215,9 +275,25 @@ Ext.require([
                                         console.log('server-side failure with status code ' + response.status);
                                     }
                                 });
+                        }else{
+                                var newUserInfo= {userID: 1, username:regisform.findField("username").getValue(),password:regisform.findField("password").getValue(), companyName: regisform.findField("companyname").getValue(), address:regisform.findField("address").getValue(), tel:regisform.findField("tel").getValue()};
+                                Ext.Ajax.request({
+                                    url: '/signup/company',
+                                    params: Ext.encode(newUserInfo),
+                                    headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+                                    method:'POST',
 
+                                    success: function(response, opts) {
+                                        Ext.getCmp("loginWindow").show();
+                                        Ext.getCmp("registerWindow").hide();
+                                    },
 
-                        }//function
+                                    failure: function(response, opts) {
+                                        console.log('server-side failure with status code ' + response.status);
+                                    }
+                                });
+                            }
+                    }//function
                     }]//item
 
             });

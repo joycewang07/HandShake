@@ -3,9 +3,7 @@ package org.joyce.webtool.component;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.joyce.webtool.model.CardEntity;
-import org.joyce.webtool.model.ResponseEntity;
-import org.joyce.webtool.model.UserEntity;
+import org.joyce.webtool.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
@@ -29,38 +27,69 @@ public class SignUp {
     @Autowired
     private SessionFactory sessionFactory;
 
-    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder = new StandardPasswordEncoder("joyce");
 
     private String checkUserAuthority = "from UserEntity where username = ? ";
     private String checkUserIdAuthority = "from UserEntity where userID = ? ";
 
-//    @ResponseBody
-//    @RequestMapping(value = "signup", method= RequestMethod.POST)
-//    public ResponseEntity signUp(@RequestBody UserEntity userEntity){
-//        Session session = sessionFactory.openSession();
-//
-//        List<UserEntity> notUniqueUsername = session.createQuery(checkUserAuthority).setParameter(0, userEntity.getUsername()).list();
-//        if(notUniqueUsername.size()!=0){
-//            return new ResponseEntity(false);
-//        } else{
-//            Integer userId = (int) (Math.random() * 10000000);
-//            List<UserEntity> checkPrimaryKey = session.createQuery(checkUserIdAuthority).setParameter(0, userId).list();
-//            while(checkPrimaryKey.size() != 0) { // TODO !!!!
-//                userId = (int) (Math.random() * 10000000);
-//                checkPrimaryKey = session.createQuery(checkUserIdAuthority).setParameter(0, userId).list();
-//            }
-//
-//            passwordEncoder = new StandardPasswordEncoder("joyce");
-//            String rawPassword = userEntity.getPassword();
-//            userEntity.setUserID(userId);
-//            userEntity.setPassword(passwordEncoder.encode(rawPassword));
-//            userEntity.setCardList(new ArrayList<CardEntity>());
-//
-//            Transaction transaction=session.beginTransaction();
-//            session.save(userEntity);
-//            transaction.commit();
-//            session.close();
-//            return new ResponseEntity(true);
-//        }
-//    }
+    @ResponseBody
+    @RequestMapping(value = "signup/individual", method= RequestMethod.POST)
+    public ResponseEntity signUp(@RequestBody IndividualEntity individualEntity){
+        Session session = sessionFactory.openSession();
+
+        List<UserEntity> notUniqueUsername = session.createQuery(checkUserAuthority).setParameter(0, individualEntity.getUsername()).list();
+        if(notUniqueUsername.size()!=0){
+            return new ResponseEntity(false);
+        } else{
+            Integer userId = (int) (Math.random() * 10000000);
+            List<UserEntity> checkPrimaryKey = session.createQuery(checkUserIdAuthority).setParameter(0, userId).list();
+            while(checkPrimaryKey.size() != 0) {
+                userId = (int) (Math.random() * 10000000);
+                checkPrimaryKey = session.createQuery(checkUserIdAuthority).setParameter(0, userId).list();
+            }
+
+
+            String rawPassword = individualEntity.getPassword();
+            individualEntity.setUserID(userId);
+            individualEntity.setPassword(passwordEncoder.encode(rawPassword));
+            individualEntity.setCardList(new ArrayList<CardEntity>());
+
+            Transaction transaction=session.beginTransaction();
+            session.save(individualEntity);
+            transaction.commit();
+            session.close();
+            return new ResponseEntity(true);
+        }
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "signup/company", method= RequestMethod.POST)
+    public ResponseEntity signUp(@RequestBody CompanyEntity companyEntity){
+        Session session = sessionFactory.openSession();
+
+        List<UserEntity> notUniqueUsername = session.createQuery(checkUserAuthority).setParameter(0, companyEntity.getUsername()).list();
+        if(notUniqueUsername.size()!=0){
+            return new ResponseEntity(false);
+        } else{
+            Integer userId = (int) (Math.random() * 10000000);
+            List<UserEntity> checkPrimaryKey = session.createQuery(checkUserIdAuthority).setParameter(0, userId).list();
+            while(checkPrimaryKey.size() != 0) {
+                userId = (int) (Math.random() * 10000000);
+                checkPrimaryKey = session.createQuery(checkUserIdAuthority).setParameter(0, userId).list();
+            }
+
+
+            String rawPassword = companyEntity.getPassword();
+            companyEntity.setUserID(userId);
+            companyEntity.setPassword(passwordEncoder.encode(rawPassword));
+
+
+            Transaction transaction=session.beginTransaction();
+            session.save(companyEntity);
+            transaction.commit();
+            session.close();
+            return new ResponseEntity(true);
+        }
+    }
 }

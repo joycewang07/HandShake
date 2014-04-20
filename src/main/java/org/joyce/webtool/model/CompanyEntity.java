@@ -55,4 +55,9 @@ public class CompanyEntity extends UserEntity {
         this.tel = tel;
     }
 
+    public void addActivity(ActivityEntity activityEntity){
+        this.getActivityEntityList().add(activityEntity);
+        activityEntity.setCompanyEntity(this);
+    }
+
 }

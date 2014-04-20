@@ -16,4 +16,9 @@ public class MainPage {
     public String mainPage () {
         return "handshake.jsp";
     }
+
+    @RequestMapping (value="/company", method = RequestMethod.GET)
+    public String tomainPage () {
+        return "company.jsp";
+    }
 }
