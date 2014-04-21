@@ -82,7 +82,8 @@ public class SignUp {
 
             String rawPassword = companyEntity.getPassword();
             companyEntity.setUserID(userId);
-            companyEntity.setPassword(passwordEncoder.encode(rawPassword));
+            String afterpassword = passwordEncoder.encode(rawPassword);
+            companyEntity.setPassword(afterpassword);
 
 
             Transaction transaction=session.beginTransaction();

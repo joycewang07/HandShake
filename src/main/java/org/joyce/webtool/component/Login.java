@@ -79,32 +79,65 @@ public class Login {
     public void setRecord() {
         passwordEncoder = new StandardPasswordEncoder("joyce");
 
-        UserEntity paul = new UserEntity();
-        paul.setUsername("paul");
-        paul.setPassword(passwordEncoder.encode("paul"));
-        paul.setUserID(45832505);
+//        UserEntity paul = new UserEntity();
+//        paul.setUsername("paul");
+//        paul.setPassword(passwordEncoder.encode("paul"));
+//        paul.setUserID(45832505);
+//
+//
+//        UserEntity natasha = new UserEntity();
+//        natasha.setUsername("natasha");
+//        natasha.setPassword(passwordEncoder.encode("natasha"));
+//        natasha.setUserID(31295782);
+//
+//        UserEntity joyce = new UserEntity();
+//        joyce.setUsername("joyce");
+//        joyce.setPassword(passwordEncoder.encode("joyce1"));
+//        joyce.setUserID(51263173);
+//
+//        UserEntity meaghan = new UserEntity();
+//        meaghan.setUsername("meaghan");
+//        meaghan.setPassword(passwordEncoder.encode("meaghan"));
+//        meaghan.setUserID(81100793);
+
+        UserEntity prince = new UserEntity();
+        prince.setUsername("prince");
+        prince.setPassword(passwordEncoder.encode("prince"));
+        prince.setUserID(4389210);
 
 
         UserEntity natasha = new UserEntity();
-        natasha.setUsername("natasha");
-        natasha.setPassword(passwordEncoder.encode("natasha"));
-        natasha.setUserID(31295782);
+        natasha.setUsername("blackwhite");
+        natasha.setPassword(passwordEncoder.encode("blackwhite"));
+        natasha.setUserID(8163782);
 
         UserEntity joyce = new UserEntity();
-        joyce.setUsername("joyce");
-        joyce.setPassword(passwordEncoder.encode("joyce1"));
-        joyce.setUserID(51263173);
+        joyce.setUsername("johnsmith");
+        joyce.setPassword(passwordEncoder.encode("johnsmith"));
+        joyce.setUserID(7616673);
 
         UserEntity meaghan = new UserEntity();
-        meaghan.setUsername("meaghan");
-        meaghan.setPassword(passwordEncoder.encode("meaghan"));
-        meaghan.setUserID(81100793);
+        meaghan.setUsername("mark");
+        meaghan.setPassword(passwordEncoder.encode("mark"));
+        meaghan.setUserID(1432793);
+
+        UserEntity joyce1 = new UserEntity();
+        joyce1.setUsername("namecard");
+        joyce1.setPassword(passwordEncoder.encode("namecard"));
+        joyce1.setUserID(2197673);
+
+        UserEntity meaghan1 = new UserEntity();
+        meaghan1.setUsername("orangecard");
+        meaghan1.setPassword(passwordEncoder.encode("orangecard"));
+        meaghan1.setUserID(4342793);
 
         Session session = sessionFactory.openSession();
         session.merge(joyce);
-        session.merge(paul);
+        session.merge(prince);
         session.merge(meaghan);
         session.merge(natasha);
+        session.merge(meaghan1);
+        session.merge(joyce1);
         session.flush();
         session.close();
 

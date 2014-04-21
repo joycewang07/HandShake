@@ -21,4 +21,9 @@ public class MainPage {
     public String tomainPage () {
         return "company.jsp";
     }
+
+    @RequestMapping (value="/admin", method = RequestMethod.GET)
+    public String adminMainPage () {
+        return "admin.jsp";
+    }
 }

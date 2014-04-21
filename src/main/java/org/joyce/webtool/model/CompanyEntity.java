@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * Created by junyan Zhang on 14-4-17.
+ * Created by joyce wang on 14-4-17.
  */
 @Entity
 @Table(name = "company", schema = "", catalog = "")
