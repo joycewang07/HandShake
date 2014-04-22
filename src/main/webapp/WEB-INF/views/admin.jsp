@@ -62,50 +62,43 @@ Time: 10:13
                 margin: '0 0 3 0'  //top, right, bottom, left
             });
 
-//            var mainPanel = Ext.create('Ext.panel.Panel', {
-//                id: 'mainPanel',
-//                title: 'Graphic',
-//               // cls: 'panelBackground',
-//               // html: '<div id="gridDiv"></div>',
-//                region: 'center',
-//                width: '70%',
-//                collapsible: true,
-//                split: true,
-//                autoScroll:true,
-//                margin: '0 0 5 0',
-//                items:[adminForm]
-//            });
-/*
-            var adminForm = Ext.create('Ext.grid.Panel', {
-                id: "adminForm",
-                title: 'General Info',
-                store: activityListStore,
-                columns: [
-                    {
-                        text: 'Company',
-                        dataIndex: 'companyName',
-                        flex: 1
-                    },
-                    {
-                        text: 'Activity Name',
-                        dataIndex: 'name',
-                        flex: 2
-                    },
-                    {
-                        text: 'Attendee Number',
-                        dataIndex: 'attendee',
-                        flex: 1
-                    }
-                ],
-                region: 'center',
-                collapsible: true,
-                width: 300,
-                height: 300,
-                split: true,
-                margin: '0 0 5 0'
-               // listeners: {itemclick: onActivityClick}
+            var adminToolBar = Ext.create('Ext.toolbar.Toolbar', {
+                width: '40%',
+                region: 'north',
+                layout: {
+                    type: 'hbox',
+                    align: 'middle'
+                    // pack: 'end'
+                },
+                items: [{
+                        xtype: 'button',
+                        text: 'Generate Report',
+                        width: 150,
+                        height: 30,
+                        handler: function () {
+                        //generate PDF
+                            var grid = Ext.getCmp("mainPanel").getStore().data.items;
+                            var jd= Ext.encode(grid);
+
+                            Ext.Ajax.request({
+                            url: '/report',
+                            headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+                            params: Ext.encode(grid),
+                            method: 'POST',
+                            success: function(response, opts) {
+
+
+                                //console.dir(obj);
+                            },
+                            failure: function(response, opts) {
+                                console.log('server-side failure with status code ' + response.status);
+                            }
+                        });
+
+                        }}]
             });
-            */
+
+
             Ext.define('generalInfoModel', {
                 extend: 'Ext.data.Model',
                 fields: [
@@ -221,7 +214,7 @@ Time: 10:13
 
             var mainViewPort = Ext.create('Ext.container.Viewport', {
                 layout: 'border',
-                items: [topBar, mainPanel, controlPanel],
+                items: [topBar, adminToolBar, mainPanel, controlPanel],
                 renderTo: Ext.getBody()
             });
 
