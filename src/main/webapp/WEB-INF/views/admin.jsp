@@ -77,13 +77,21 @@ Time: 10:13
                         height: 30,
                         handler: function () {
                         //generate PDF
+                            var arrayData = new Array();
                             var grid = Ext.getCmp("mainPanel").getStore().data.items;
-                            var jd= Ext.encode(grid);
-
+                          //S  var jd= Ext.encode(grid);
+                            var jsonList = new Array();
+                            for (var i = 0; i < grid.length; i++) {
+                               // arrayData.push({activityName: grid[i].data.activityName, companyName})
+                                //arrayData.push(grid[i].data);
+                                //var jdf = Ext.encode(arrayData[0]);
+                                //jsonList[i] = jdf;
+                            }
+                            var result = Ext.encode(jsonList);
                             Ext.Ajax.request({
                             url: '/report',
                             headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
-                            params: Ext.encode(grid),
+                            params: result,
                             method: 'POST',
                             success: function(response, opts) {
 

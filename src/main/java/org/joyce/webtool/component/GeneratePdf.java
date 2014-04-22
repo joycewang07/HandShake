@@ -8,29 +8,39 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Administrator on 14-4-21.
  */
 @Controller
 public class GeneratePdf {
+       List<ModelMap> result = createModelMap();
 
+        @RequestMapping(value = "/report", method = RequestMethod.POST)
+        public ModelAndView doProcess( Locale locale,@RequestBody List<ModelMap> result) {
+            //List<Map<String,Object>> pdf,
 
-
-        @RequestMapping(value = "/report", method = RequestMethod.GET)
-        public ModelAndView doProcess(@RequestBody List<Map<String,Object>> pdf,Locale locale, ModelMap model) {
 
             Date date = new Date();
             DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
             String formattedDate = dateFormat.format(date);
-            model.addAttribute("time", formattedDate );
+            //model.addAttribute("time", formattedDate );
 
 
-            return new ModelAndView(new MyView(), model);
+            return new ModelAndView(new MyView(), new ModelMap());
+        }
+
+        public List<ModelMap> createModelMap(){
+
+            ModelMap modelMap = new ModelMap();
+            //modelMap.addAllAttributes(,null);
+            modelMap.put("companyName",null);
+            modelMap.put("activityName",null);
+            modelMap.put("userAmount", null);
+            List<ModelMap> result = new LinkedList<>();
+            result.add(modelMap);
+                   return  result;
         }
     }
 
