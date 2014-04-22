@@ -53,6 +53,44 @@ user_activity(join user activity, many to many)
 修改图片，上传
 (-)1/SignUp
 ?? LocalThread.
+========================================
+presentation
+
+一、介绍主要业务
+
+二、实体关系
+
+三、应用了哪些技术
+spring boot（for simplify spring configuration）
+Annotation and Java Config(No XML including web.xml)
+Spring
+    IOC
+    MVC
+    AOP(Interceptor)
+Hibernate：
+    OneToOne
+    OneToMany (ManyToOne)
+    Inheritance Mapping
+    Native SQL
+JSON data
+front end framework Extjs
+responsive layout
+generate PDF
+
+四、详细介绍
+前端三个主要部分分别是怎么请求显示的，前端与Server端的JSON交互
+左边：activity（两种角色相同，只是查询条件不同）
+中间：relationship（不同的查询方式，讲解时重现实体关系图）
+右边：从前端Store获取
+Mycard：先请求当前用户的Card，再发回Server修改后的Card
+Create Activity：写入Activity
+Comment：
+Admin: report
+
+五、
+遇到的问题，inheritance mapping
+
+
 
 
 

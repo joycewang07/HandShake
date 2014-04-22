@@ -62,15 +62,15 @@ public class MyView  extends AbstractPdfView {
 
             table.addCell(titleCell);
 
-            table.addCell("deviceDefectAmount");
-            table.addCell(String.valueOf(i1));
-            table.addCell("useErrorsAmount");
-            table.addCell(String.valueOf(i2));
-            table.addCell("unknownsAmount");
-            table.addCell(String.valueOf(i3));
-            table.addCell("bothsAmount");
-            table.addCell(String.valueOf(i4));
-            document.add(table);
+//            table.addCell("deviceDefectAmount");
+//            table.addCell(String.valueOf(i1));
+//            table.addCell("useErrorsAmount");
+//            table.addCell(String.valueOf(i2));
+//            table.addCell("unknownsAmount");
+//            table.addCell(String.valueOf(i3));
+//            table.addCell("bothsAmount");
+//            table.addCell(String.valueOf(i4));
+//            document.add(table);
 
             document.add(p2);
 
