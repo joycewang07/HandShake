@@ -76,32 +76,29 @@ Time: 10:13
                         width: 150,
                         height: 30,
                         handler: function () {
+                            window.location.href = "/report";
                         //generate PDF
-                            var arrayData = new Array();
-                            var grid = Ext.getCmp("mainPanel").getStore().data.items;
-                          //S  var jd= Ext.encode(grid);
-                            var jsonList = new Array();
-                            for (var i = 0; i < grid.length; i++) {
-                               // arrayData.push({activityName: grid[i].data.activityName, companyName})
-                                //arrayData.push(grid[i].data);
-                                //var jdf = Ext.encode(arrayData[0]);
-                                //jsonList[i] = jdf;
-                            }
-                            var result = Ext.encode(jsonList);
-                            Ext.Ajax.request({
-                            url: '/report',
-                            headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
-                            params: result,
-                            method: 'POST',
-                            success: function(response, opts) {
-
-
-                                //console.dir(obj);
-                            },
-                            failure: function(response, opts) {
-                                console.log('server-side failure with status code ' + response.status);
-                            }
-                        });
+//                            var arrayData = new Array();
+//                            var grid = Ext.getCmp("mainPanel").getStore().data.items;
+//                            var jd= Ext.encode(grid);
+//                            var jsonList = new Array();
+//                            for (var i = 0; i < grid.length; i++) {
+//                                arrayData.push({activityName: grid[i].data.activityName, companyName})
+//                                arrayData.push(grid[i].data);
+//                                var jdf = Ext.encode(arrayData[0]);
+//                                jsonList[i] = jdf;
+//                            }
+//                            var result = Ext.encode(jsonList);
+//                            Ext.Ajax.request({
+//                            url: '/report',
+//                            headers: {'Accept': 'application/json', 'Content-Type':'application/json'},
+//                            params: result,
+//                            method: 'POST',
+//                            success: function(response, opts) {},
+//                            failure: function(response, opts) {
+//                                console.log('server-side failure with status code ' + response.status);
+//                            }
+//                        });
 
                         }}]
             });
@@ -169,60 +166,24 @@ Time: 10:13
             var controlPanel = Ext.create('Ext.panel.Panel', {
                 title: 'Control',
                 id: "rightPanel",
-                layout: 'vbox',
+                layout: 'fit',
                 width: '30%',
                 region: 'east',
-                margin: '10 10 10 10',
-                items:[{
-                        xtype      : 'fieldcontainer',
-                        fieldLabel : 'Menu',
-                        defaultType: 'radiofield',
-                        defaults: {
-                            flex: 2
-                        },
-                        layout: 'vbox',
-                        items: [{
-                                boxLabel  : 'Start',
-                                name      : 'Menu',
-                                inputValue: 'Start',
-                                id        : 'start',
-                                handler: function(){}
-                            }, {
-                                boxLabel  : 'End',
-                                name      : 'Menu',
-                                inputValue: 'End',
-                                id        : 'end',
-                                handler: function(){
-                                }
-                            }, {
-                                boxLabel  : 'Obstacle',
-                                name      : 'Menu',
-                                inputValue: 'Obstacle',
-                                id        : 'obstacle'
-                            },
-                            {
-                                xtype: 'button',
-                                text: 'Set Obstacle',
-                                name : 'setObstacle',
-                                id :'setObstacle',
-                                handler: function(){}
-                            },
-                            {
-                                xtype: 'button',
-                                text: 'Go',
-                                name : 'go',
-                                id :'go',
-                                handler: function(){}
-                            }
-                        ]
-
-                    }]
-
+                margin: '10 10 10 10'
+                //style:'background-image:url(images/controlPpic.jpg)'
+                //items:[backgroundImage]
             });
+
+            var backgroundImage = Ext.create('Ext.Img',{
+                src: '/images/controlPpic.jpg',
+                renderTo: Ext.get("rightPanel"),
+                region: 'east',
+                width: 300
+            })
 
             var mainViewPort = Ext.create('Ext.container.Viewport', {
                 layout: 'border',
-                items: [topBar, adminToolBar, mainPanel, controlPanel],
+                items: [topBar, adminToolBar, mainPanel, backgroundImage],
                 renderTo: Ext.getBody()
             });
 

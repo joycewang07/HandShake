@@ -71,6 +71,7 @@ public class DisplayComment {
         List<CommentEntity> comment = session.createQuery(retrieveComment).setParameter(0,user1Id).setParameter(1,user2Id).list();
 
         if(comment.size()==0){
+            commentEntity.setUser1Id(user1Id);
             session.save(commentEntity);
         } else {
             CommentEntity updateComment = comment.get(0);

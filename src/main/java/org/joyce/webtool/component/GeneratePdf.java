@@ -1,5 +1,8 @@
 package org.joyce.webtool.component;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,34 +18,32 @@ import java.util.*;
  */
 @Controller
 public class GeneratePdf {
-       List<ModelMap> result = createModelMap();
 
-        @RequestMapping(value = "/report", method = RequestMethod.POST)
-        public ModelAndView doProcess( Locale locale,@RequestBody List<ModelMap> result) {
-            //List<Map<String,Object>> pdf,
+    @Autowired
+    private SessionFactory sessionFactory;
 
-
-            Date date = new Date();
-            DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
-            String formattedDate = dateFormat.format(date);
-            //model.addAttribute("time", formattedDate );
+    String retrieveGeneralInfo = "select company.company_name as companyName, activity.activity_name as activityName, count(distinct relationship.fk_user2) as userAmount " +
+            "from activity join company on activity.fk_company = company.pk_user" +
+            "  join relationship on activity.pk_activity = relationship.fk_activity" +
+            "  group by activity.pk_activity;";
 
 
-            return new ModelAndView(new MyView(), new ModelMap());
-        }
+    @RequestMapping(value = "/report", method = RequestMethod.GET)
+    public ModelAndView doProcess(ModelMap model) {
 
-        public List<ModelMap> createModelMap(){
+//        Date date = new Date();
+//        DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, locale);
+//        String formattedDate = dateFormat.format(date);
 
-            ModelMap modelMap = new ModelMap();
-            //modelMap.addAllAttributes(,null);
-            modelMap.put("companyName",null);
-            modelMap.put("activityName",null);
-            modelMap.put("userAmount", null);
-            List<ModelMap> result = new LinkedList<>();
-            result.add(modelMap);
-                   return  result;
-        }
+        Session session = sessionFactory.openSession();
+
+        List<Object[]> generalInfo = session.createSQLQuery(retrieveGeneralInfo).list();
+
+        session.close();
+
+        model.addAttribute("pdfData",generalInfo);
+
+
+        return new ModelAndView(new MyView(), model);
     }
-
-
-
+}
